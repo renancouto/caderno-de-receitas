@@ -94,7 +94,7 @@ The site has two pages: a cookbook-style A–Z index of the Catalogue with searc
 ### Architecture
 
 - The site is a static Astro site, rebuilt and published by GitHub Actions to GitHub Pages from a public repository (ADR 0001). There is no database, server, login or editing interface: editing means committing.
-- All visual UI is written as Preact components; Astro pages only load content and render those components (ADR 0002). Only the interactive parts are hydrated in the browser: the tick-off list and the index controls (search, sort, Tag filter). Everything else ships no JavaScript.
+- All visual UI is written as Preact components; Astro loads content, generates the static pages, hydrates islands and processes images (ADR 0002). Only the interactive parts are hydrated in the browser: the tick-off list and the index controls (search, sort, Tag filter). Everything else ships no JavaScript.
 - Styling is plain CSS. The site is light theme only.
 - Code, file names, data field names, page addresses and the glossary are in English. All interface text and Recipe content are in Brazilian Portuguese.
 - Page addresses: the index at the site root, each Recipe at `/recipes/<file-name>`. The file name is chosen from the title when the Recipe is created and never changes with the title.
