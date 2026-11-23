@@ -1,3 +1,9 @@
 node_modules/
 dist/
 .astro/
+
+# Engineering skills are restored from skills-lock.json with `npx skills install`.
+# Project-specific skills are committed: add an exception for each one.
+.agents/skills/*
+!.agents/skills/add-recipe/
+!.agents/skills/log-cook/

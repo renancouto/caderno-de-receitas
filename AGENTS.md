@@ -2,6 +2,8 @@
 
 ## Agent skills
 
+The engineering skills in `.agents/skills/` are not committed. Restore them from `skills-lock.json` with `npx skills install`. Project-specific skills (`add-recipe`, `log-cook`) are committed; add a `.gitignore` exception for any new one.
+
 ### Issue tracker
 
 Issues and specs live as local markdown files under `.scratch/<feature>/`. See `docs/agents/issue-tracker.md`.

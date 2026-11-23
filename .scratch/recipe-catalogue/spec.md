@@ -4,11 +4,11 @@ Status: ready-for-agent
 
 ## Problem Statement
 
-I keep recipes I like on YouTube and on random websites. Finding them again means searching through playlists and bookmarks, the originals can be deleted or changed at any time, and each one uses its own units (tablespoons, US cups, pinches), so I keep converting while cooking. I can't record my own tweaks next to a recipe, how much I liked it, or when I last made it.
+My recipes are scattered: some are my own, some I adapted from several places, and many live on YouTube or random websites. Finding them again means searching through notes, playlists and bookmarks, recipes online can be deleted or changed at any time, and each one uses its own units (tablespoons, US cups, pinches), so I keep converting while cooking. I can't record my own tweaks next to a recipe, how much I liked it, or when I last made it.
 
 ## Solution
 
-A personal Catalogue of Recipes published as a static website in Brazilian Portuguese, which I own entirely. Each Recipe is a file in a git repository, rewritten in my own words with every quantity in a Standard Unit, and keeps a link to its Source only as credit. I add Recipes and log Cooks by talking to my coding agent through two project skills (`@add-recipe` and `@log-cook`), which write the files; GitHub Actions tests the site and publishes it to GitHub Pages on every push.
+A personal Catalogue of Recipes published as a static website in Brazilian Portuguese, which I own entirely. Each Recipe is a file in a git repository with every quantity in a Standard Unit. A Recipe may be my own, with no Source, or adapted from one or more Sources, which are kept only as credit links and whose text is rewritten in my own words. I add Recipes and log Cooks by talking to my coding agent through two project skills (`@add-recipe` and `@log-cook`), which write the files; GitHub Actions tests the site and publishes it to GitHub Pages on every push.
 
 The site has two pages: a cookbook-style A–Z index of the Catalogue with search, sorting and Tag filtering, and an editorial Recipe page designed for reading on a phone while cooking, where Ingredients and Steps can be ticked off.
 
@@ -52,7 +52,7 @@ The site has two pages: a cookbook-style A–Z index of the Catalogue with searc
 31. As the owner, I want my Notes shown after the Steps with a small "Notas" label in a quiet style, so that my tweaks are there without competing with the Recipe.
 32. As the owner, I want my Log shown as a timeline of Cooks, newest first, each with its date and note, so that I can remember how previous attempts went.
 33. As the owner, I want a Cook without a note to show just its date, so that the Log stays tidy.
-34. As the owner, I want a small "Adaptada de" credit linking to the Source, so that I remember where a Recipe came from.
+34. As the owner, I want a small "Adaptada de" credit linking to each Source, and no credit line at all on my own Recipes, so that I remember where a Recipe came from without original Recipes looking incomplete.
 35. As the owner, I want a link back to the index from the Recipe page, so that I can return to browsing.
 36. As the owner, I want each Recipe at a stable address based on its file name, so that links don't break when I change its title.
 37. As the owner, I want the Recipe page laid out in one column on a phone and with Ingredients beside the Steps on a wide screen, so that it works in the kitchen and at a desk.
@@ -67,27 +67,30 @@ The site has two pages: a cookbook-style A–Z index of the Catalogue with searc
 
 ### Adding Recipes and logging Cooks
 
-43. As the owner, I want to run `@add-recipe`, paste a recipe and its link, and get a Recipe file, so that adding a Recipe takes minutes.
-44. As the owner, I want `@add-recipe` to Normalise every quantity into a Standard Unit, a plain count or "a gosto", so that I never convert while cooking.
-45. As the owner, I want `@add-recipe` to translate the recipe into Brazilian Portuguese and rewrite the Steps in its own words, so that the Catalogue is consistent and doesn't copy the Source's text.
-46. As the owner, I want `@add-recipe` to tell me which conversions it guessed (e.g. a tablespoon of an unusual ingredient), so that I can check them.
-47. As the owner, I want `@add-recipe` to fill in servings and total time whenever the source gives them, so that future servings adjustment has the data.
-48. As the owner, I want `@add-recipe` to choose a file name from the title and avoid clashing with existing Recipes, so that addresses are unique.
-49. As the owner, I want `@add-recipe` to accept Photos I supply and remove their location metadata, so that my home location is never published.
-50. As the owner, I want `@add-recipe` to check the new file against the recipe rules before finishing, so that I never commit a Recipe that breaks the build.
-51. As the owner, I want to review the file `@add-recipe` writes before committing, so that I stay in control of my Catalogue.
-52. As the owner, I want to run `@log-cook` with a sentence like "fiz a carbonara hoje, precisava de mais pimenta" and have it add a Cook to the right Recipe's Log, so that logging is effortless.
-53. As the owner, I want `@log-cook` to ask me which Recipe I mean when the sentence matches more than one, so that it never logs to the wrong one.
-54. As the owner, I want `@log-cook` to update the Rating when I mention one, so that I can rate in the same sentence.
-55. As the owner, I want to edit a Recipe file by hand at any time (Notes, Rating, Tags), so that I'm never locked into the skills.
+43. As the owner, I want to run `@add-recipe` with a recipe pasted or written in my own words, plus any Source links, and get a Recipe file, so that adding a Recipe takes minutes.
+44. As the owner, I want `@add-recipe` to accept a Recipe with no Source, so that I can record my own recipes.
+43b. As the owner, I want `@add-recipe` to accept several Sources for one Recipe, so that a recipe I put together from several places credits all of them.
+45. As the owner, I want `@add-recipe` to Normalise every quantity into a Standard Unit, a plain count or "a gosto", so that I never convert while cooking.
+46. As the owner, I want `@add-recipe` to translate a recipe taken from a Source into Brazilian Portuguese and rewrite its Steps in its own words, so that the Catalogue is consistent and doesn't copy anyone else's text.
+47. As the owner, I want `@add-recipe` to keep my own wording for original Recipes and only Normalise the quantities, so that my recipes stay in my voice.
+48. As the owner, I want `@add-recipe` to tell me which conversions it guessed (e.g. a tablespoon of an unusual ingredient), so that I can check them.
+49. As the owner, I want `@add-recipe` to fill in servings and total time whenever the recipe gives them, so that future servings adjustment has the data.
+50. As the owner, I want `@add-recipe` to choose a file name from the title and avoid clashing with existing Recipes, so that addresses are unique.
+51. As the owner, I want `@add-recipe` to accept Photos I supply and remove their location metadata, so that my home location is never published.
+52. As the owner, I want `@add-recipe` to check the new file against the recipe rules before finishing, so that I never commit a Recipe that breaks the build.
+53. As the owner, I want to review the file `@add-recipe` writes before committing, so that I stay in control of my Catalogue.
+54. As the owner, I want to run `@log-cook` with a sentence like "fiz a carbonara hoje, precisava de mais pimenta" and have it add a Cook to the right Recipe's Log, so that logging is effortless.
+55. As the owner, I want `@log-cook` to ask me which Recipe I mean when the sentence matches more than one, so that it never logs to the wrong one.
+56. As the owner, I want `@log-cook` to update the Rating when I mention one, so that I can rate in the same sentence.
+57. As the owner, I want to edit a Recipe file by hand at any time (Notes, Rating, Tags), so that I'm never locked into the skills.
 
 ### Safety and publishing
 
-56. As the owner, I want the build to fail with a clear message naming the file and the problem when a Recipe breaks the rules, so that a mistake is never published.
-57. As the owner, I want every push to main to be tested and published automatically to GitHub Pages, so that I never deploy by hand.
-58. As the owner, I want publishing to happen only when all tests pass, so that a broken site is never published.
-59. As the owner, I want every pull request to run the full test suite, so that changes are checked before they reach main.
-60. As the owner, I want a check that fails when a committed Photo contains location metadata, so that a mistake outside `@add-recipe` is still caught.
+58. As the owner, I want the build to fail with a clear message naming the file and the problem when a Recipe breaks the rules, so that a mistake is never published.
+59. As the owner, I want every push to main to be tested and published automatically to GitHub Pages, so that I never deploy by hand.
+60. As the owner, I want publishing to happen only when all tests pass, so that a broken site is never published.
+61. As the owner, I want every pull request to run the full test suite, so that changes are checked before they reach main.
+62. As the owner, I want a check that fails when a committed Photo contains location metadata, so that a mistake outside `@add-recipe` is still caught.
 
 ## Implementation Decisions
 
@@ -117,7 +120,7 @@ The site has two pages: a cookbook-style A–Z index of the Catalogue with searc
 
   type RecipeData = {
     title: string;
-    source?: string;      // URL
+    sources?: string[];   // URLs; none for an original Recipe
     servings?: number;
     totalMinutes?: number;
     tags?: string[];
@@ -134,10 +137,10 @@ The site has two pages: a cookbook-style A–Z index of the Catalogue with searc
 
 ### Modules
 
-- **Recipe rules**: a pure module that takes the raw contents of a Recipe file and returns either the parsed Recipe or a list of problems, each with a human-readable message. It owns every rule: required fields, allowed units, quantities positive, Rating between 1 and 5, valid ISO dates, Source is a URL, at least one Ingredient and one Step, file name is lowercase kebab-case. The Astro content collection uses it, so the build fails with the file name and every problem. `@add-recipe` and `@log-cook` also run it before finishing.
+- **Recipe rules**: a pure module that takes the raw contents of a Recipe file and returns either the parsed Recipe or a list of problems, each with a human-readable message. It owns every rule: required fields, allowed units, quantities positive, Rating between 1 and 5, valid ISO dates, every Source is a URL, at least one Ingredient and one Step, file name is lowercase kebab-case. The Astro content collection uses it, so the build fails with the file name and every problem. `@add-recipe` and `@log-cook` also run it before finishing.
 - **Catalogue view**: a pure module that, given all Recipes plus a search result set, an order and a Tag, returns what the index shows: either letter groups (A–Z) or a flat list, with the value to show on the right of each entry. Sorting uses Portuguese collation for titles. Recipes missing the sorted value go last.
 - **Search**: Pagefind indexes the built Recipe pages at build time. The index controls ask Pagefind for matching Recipe addresses and pass them to the Catalogue view. Searching works offline once loaded and needs no server.
-- **UI components** (Preact): index page, index entry, letter row, index controls, Recipe header, facts strip, Ingredient list, Step list, tick-off list, Notes, Log timeline, Source credit.
+- **UI components** (Preact): index page, index entry, letter row, index controls, Recipe header, facts strip, Ingredient list, Step list, tick-off list, Notes, Log timeline, Source credit (hidden when there are no Sources).
 - **Project skills**: `@add-recipe` and `@log-cook` live in the project's agent skills folder. They are AI instructions plus any small scripts they need (for example, removing image metadata and running the recipe rules).
 
 ### Design
@@ -181,4 +184,4 @@ Also out of scope: dark mode, any login or editing interface on the site, downlo
 
 - Domain terms are defined in `GLOSSARY.md`; decisions in `docs/adr/0001-static-site-recipes-as-files.md` and `docs/adr/0002-page-ui-as-preact-components.md`.
 - The UI prototype (all variants explored) is on the `prototype/ui` branch; the chosen design is in `.scratch/recipe-catalogue/design-verdict.md`.
-- The repository is public, so `@add-recipe` must rewrite Steps in its own words rather than copying the Source, and must strip Photo location metadata.
+- The repository is public, so `@add-recipe` must rewrite Steps taken from a Source in its own words rather than copying them, and must strip Photo location metadata.

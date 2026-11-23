@@ -1,6 +1,6 @@
 # Recipe Catalogue
 
-A personal catalogue of recipes collected from YouTube and other websites, kept under the owner's control and adapted to their taste.
+A personal catalogue of recipes, both the owner's own and ones adapted from elsewhere, kept under the owner's control and adapted to their taste.
 
 ## Language
 
@@ -13,7 +13,7 @@ One dish in the Catalogue, written out in full by the owner, with every quantity
 _Avoid_: Entry, item, post
 
 **Source**:
-A link to where a Recipe was originally found. It is a credit only; the Recipe never depends on the Source still existing.
+A link to a place a Recipe was adapted from. A Recipe has none (an original), one, or several. It is a credit only; the Recipe never depends on a Source still existing.
 _Avoid_: Original, reference, origin
 
 **Notes**:
