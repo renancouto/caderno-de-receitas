@@ -11,6 +11,7 @@
     "format:check": "oxfmt --check",
     "lint": "oxlint --deny-warnings",
     "typecheck": "astro check",
+    "check:recipe": "node scripts/check-recipe.ts",
     "test:unit": "vitest run --project unit",
     "test:components": "vitest run --project storybook",
     "test:e2e": "RECIPES_DIR=tests/e2e/recipes OUT_DIR=dist-e2e astro build && playwright test",
