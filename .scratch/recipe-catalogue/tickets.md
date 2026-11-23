@@ -14,6 +14,7 @@ flowchart TD
   T10["10 · Search"]
   T11["11 · @add-recipe skill"]
   T12["12 · @log-cook skill"]
+  T13["13 · Step photos"]
 
   T1 --> T2
   T1 --> T3
@@ -29,6 +30,8 @@ flowchart TD
   T3 --> T11
   T7 --> T11
   T3 --> T12
+  T7 --> T13
+  T13 --> T11
 
   classDef foundation fill:#efe6d6,stroke:#8a5a3b,color:#1d1c1a
   classDef recipe fill:#f9f4ea,stroke:#8a5a3b,color:#1d1c1a
@@ -36,7 +39,7 @@ flowchart TD
   classDef skill fill:#ffffff,stroke:#6f6a62,stroke-dasharray:4 3,color:#1d1c1a
 
   class T1,T2,T3,T4 foundation
-  class T5,T6,T7 recipe
+  class T5,T6,T7,T13 recipe
   class T8,T9,T10 index
   class T11,T12 skill
 ```

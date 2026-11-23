@@ -2,7 +2,7 @@
 
 **What to build:** A project agent skill the owner invokes as `@add-recipe` to turn a pasted or dictated recipe into a valid Recipe file, ready to review and commit. It handles original Recipes (no Source) and Recipes adapted from one or more Sources.
 
-**Blocked by:** 03 (Complete recipe rules), 07 (Photos)
+**Blocked by:** 03 (Complete recipe rules), 07 (Photos), 13 (Step photos)
 
 **Status:** ready-for-agent
 
