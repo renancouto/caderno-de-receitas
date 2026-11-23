@@ -1,31 +1,75 @@
 import { parse } from "yaml";
+import { z } from "zod";
 
-export type Unit = "g" | "ml" | "l" | "cup";
+const units = ["g", "ml", "l", "cup"] as const;
+const fileNamePattern = /^[a-z0-9]+(-[a-z0-9]+)*\.md$/;
 
-export type Ingredient =
-  | { name: string; quantity: number; unit?: Unit }
-  | { name: string; toTaste: true };
+const ingredientSchema = z.union([
+  z.strictObject({
+    name: z.string().trim().min(1),
+    quantity: z.number().positive(),
+    unit: z.enum(units).optional(),
+  }),
+  z.strictObject({ name: z.string().trim().min(1), toTaste: z.literal(true) }),
+]);
 
-export type IngredientGroup = { name?: string; items: Ingredient[] };
+const groupSchema = z.object({
+  name: z.string().optional(),
+  items: z.array(ingredientSchema).min(1),
+});
 
-export type Recipe = {
-  title: string;
-  ingredients: IngredientGroup[];
-  steps: string[];
-};
+const cookSchema = z.object({
+  date: z.iso.date({
+    error: (issue) => `Cook date "${String(issue.input)}" is not a real date in YYYY-MM-DD form.`,
+  }),
+  note: z.string().optional(),
+});
+
+const frontMatterSchema = z.object({
+  title: z.string({ error: "The Recipe has no title." }).trim().min(1, "The Recipe has no title."),
+  sources: z
+    .array(
+      z.url({
+        protocol: /^https?$/,
+        error: (issue) => `Source "${String(issue.input)}" is not a URL.`,
+      }),
+      { error: "sources must be a list of URLs." },
+    )
+    .optional(),
+  servings: z
+    .number({ error: "servings must be a positive number." })
+    .positive("servings must be a positive number.")
+    .optional(),
+  totalMinutes: z
+    .number({ error: "totalMinutes must be a positive number." })
+    .positive("totalMinutes must be a positive number.")
+    .optional(),
+  tags: z.array(z.string(), { error: "tags must be a list of text values." }).optional(),
+  rating: z
+    .union([z.literal(1), z.literal(2), z.literal(3), z.literal(4), z.literal(5)], {
+      error: "rating must be a whole number from 1 to 5.",
+    })
+    .optional(),
+  photos: z.array(z.string(), { error: "photos must be a list of text values." }).optional(),
+  ingredients: z
+    .array(groupSchema, { error: "The Recipe has no Ingredients." })
+    .min(1, "The Recipe has no Ingredients."),
+  log: z.array(cookSchema, { error: "log must be a list of Cooks." }).optional(),
+});
+
+export type Ingredient = z.infer<typeof ingredientSchema>;
+export type IngredientGroup = z.infer<typeof groupSchema>;
+export type Cook = z.infer<typeof cookSchema>;
+export type Recipe = z.infer<typeof frontMatterSchema> & { steps: string[]; notes?: string };
 
 export type RecipeCheck = { ok: true; recipe: Recipe } | { ok: false; problems: string[] };
 
 const frontMatterPattern = /^---\r?\n([\s\S]*?)\r?\n?---\r?\n?([\s\S]*)$/;
 
-function splitFile(contents: string): { data: Record<string, unknown>; body: string } {
+function splitFile(contents: string): { data: unknown; body: string } {
   const match = frontMatterPattern.exec(contents);
   if (!match) return { data: {}, body: contents };
-  const data: unknown = parse(match[1] ?? "");
-  return {
-    data: typeof data === "object" && data !== null ? (data as Record<string, unknown>) : {},
-    body: match[2] ?? "",
-  };
+  return { data: parse(match[1] ?? ""), body: match[2] ?? "" };
 }
 
 function readSteps(body: string): string[] {
@@ -34,26 +78,60 @@ function readSteps(body: string): string[] {
   return [...(section[1] ?? "").matchAll(/^\s*\d+\.\s+(.+)$/gm)].map((m) => (m[1] ?? "").trim());
 }
 
-function readIngredients(value: unknown): IngredientGroup[] {
-  if (!Array.isArray(value)) return [];
-  return value as IngredientGroup[];
+function readNotes(body: string): string | undefined {
+  const section = /^##\s+Notas\s*$([\s\S]*?)(?=^##\s|(?![\s\S]))/m.exec(body);
+  return section?.[1]?.trim() || undefined;
 }
 
-export function checkRecipe(contents: string): RecipeCheck {
+const lookup = (value: unknown, path: readonly PropertyKey[]): unknown =>
+  path.reduce<unknown>(
+    (current, key) =>
+      typeof current === "object" && current !== null
+        ? (current as Record<PropertyKey, unknown>)[key]
+        : undefined,
+    value,
+  );
+
+// Ingredient and Ingredient Group issues are rewritten from their path so each message names its location.
+function describeIssue(issue: z.core.$ZodIssue, data: unknown): string {
+  const [root, groupIndex, items, itemIndex] = issue.path;
+  if (root !== "ingredients" || typeof groupIndex !== "number") return issue.message;
+
+  const groupName = lookup(data, ["ingredients", groupIndex, "name"]);
+  const group =
+    typeof groupName === "string" && groupName.trim()
+      ? `Ingredient Group "${groupName}"`
+      : `Ingredient Group ${groupIndex + 1}`;
+  if (items !== "items") return issue.message;
+  if (itemIndex === undefined) return `${group} is empty.`;
+
+  const ingredient = ["ingredients", groupIndex, "items", itemIndex];
+  const name = lookup(data, [...ingredient, "name"]);
+  if (typeof name !== "string" || !name.trim()) return `${group} has an Ingredient with no name.`;
+  const unit = lookup(data, [...ingredient, "unit"]);
+  return unit === undefined || units.some((u) => u === unit)
+    ? `Ingredient "${name}" needs a positive quantity, or toTaste: true.`
+    : `Ingredient "${name}" has the unit "${String(unit)}"; use g, ml, l, cup, or no unit.`;
+}
+
+export function checkRecipe(contents: string, fileName: string): RecipeCheck {
   const { data, body } = splitFile(contents);
-  const problems: string[] = [];
-
-  const title = typeof data.title === "string" ? data.title.trim() : "";
-  if (!title) problems.push("The Recipe has no title.");
-
-  const ingredients = readIngredients(data.ingredients);
-  if (!ingredients.some((group) => Array.isArray(group?.items) && group.items.length > 0)) {
-    problems.push("The Recipe has no Ingredients.");
-  }
-
+  const parsed = frontMatterSchema.safeParse(data ?? {});
   const steps = readSteps(body);
-  if (steps.length === 0) problems.push('The Recipe has no Steps under a "Preparo" heading.');
+  const notes = readNotes(body);
 
-  if (problems.length > 0) return { ok: false, problems };
-  return { ok: true, recipe: { title, ingredients, steps } };
+  const problems = [
+    ...new Set([
+      ...(fileNamePattern.test(fileName)
+        ? []
+        : [`The file name "${fileName}" must be lowercase kebab-case (like my-recipe.md).`]),
+      ...(parsed.success ? [] : parsed.error.issues.map((issue) => describeIssue(issue, data))),
+      ...(steps.length > 0
+        ? []
+        : ['The Recipe needs Steps: a numbered list under a "Preparo" heading.']),
+    ]),
+  ];
+
+  if (!parsed.success || problems.length > 0) return { ok: false, problems };
+  return { ok: true, recipe: { ...parsed.data, steps, ...(notes ? { notes } : {}) } };
 }

@@ -16,7 +16,7 @@ function recipeLoader(): Loader {
       const failures: string[] = [];
       for (const fileName of fileNames) {
         const filePath = join(recipesDir, fileName);
-        const result = checkRecipe(await readFile(filePath, "utf8"));
+        const result = checkRecipe(await readFile(filePath, "utf8"), fileName);
         if (!result.ok) {
           failures.push(`${filePath}:\n${result.problems.map((p) => `  - ${p}`).join("\n")}`);
           continue;

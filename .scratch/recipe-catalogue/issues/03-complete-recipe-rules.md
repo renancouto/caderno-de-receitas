@@ -4,7 +4,7 @@
 
 **Blocked by:** 01 (Walking skeleton)
 
-**Status:** ready-for-agent
+**Status:** done
 
 The Recipe file shape (from the spec, refined from the UI prototype's type):
 
@@ -34,15 +34,25 @@ type RecipeData = {
 
 Steps are a numbered list under a "Preparo" heading in the body; Notes are free text under "Notas".
 
-- [ ] Only Standard Units, plain counts or "a gosto" are accepted; anything else (tbsp, tsp, pinch, oz, US cup) is a problem naming the Ingredient
-- [ ] Quantities, servings and total time must be positive numbers
-- [ ] Rating must be a whole number from 1 to 5
-- [ ] Every Cook date must be a real date in `YYYY-MM-DD` form
-- [ ] Every Source must be a URL; a Recipe with no Sources is valid
-- [ ] At least one Ingredient overall; no empty Ingredient Group
-- [ ] Steps must be a non-empty numbered list under "Preparo"
-- [ ] The file name must be lowercase kebab-case
-- [ ] All problems in a file are reported together, not just the first
-- [ ] The build fails with the file name and every problem
-- [ ] Unit tests: one case per rule, plus edge cases (Rating 0 and 6, "tbsp", empty group, 2026-02-30, accented Tags)
-- [ ] End-to-end test: building with an invalid Recipe fails, and the output names the file and the problem
+- [x] Only Standard Units, plain counts or "a gosto" are accepted; anything else (tbsp, tsp, pinch, oz, US cup) is a problem naming the Ingredient
+- [x] Quantities, servings and total time must be positive numbers
+- [x] Rating must be a whole number from 1 to 5
+- [x] Every Cook date must be a real date in `YYYY-MM-DD` form
+- [x] Every Source must be a URL; a Recipe with no Sources is valid
+- [x] At least one Ingredient overall; no empty Ingredient Group
+- [x] Steps must be a non-empty numbered list under "Preparo"
+- [x] The file name must be lowercase kebab-case
+- [x] All problems in a file are reported together, not just the first
+- [x] The build fails with the file name and every problem
+- [x] Unit tests: one case per rule, plus edge cases (Rating 0 and 6, "tbsp", empty group, 2026-02-30, accented Tags)
+- [x] End-to-end test: building with an invalid Recipe fails, and the output names the file and the problem
+
+## Comments
+
+Done. Notes for later tickets:
+
+- `checkRecipe(contents, fileName)` requires the file name (e.g. `carbonara-picante.md`) so the kebab-case rule cannot be skipped. The content loader passes it; the skills in tickets 11 and 12 must pass it too.
+- On success `checkRecipe` returns the full parsed `Recipe`: title, sources, servings, totalMinutes, tags, rating, photos, ingredients, log, steps and `notes` (text under "Notas"). Absent optional fields are omitted. Content collection consumers get these typed fields.
+- Problem messages are in English and name the Ingredient, Group, Source or Cook date involved. The loader's error lists the file path and every problem.
+- `photos` and `tags` are only checked to be lists of text. Accented Tags are accepted.
+- The e2e invalid-build test runs `astro build` on `tests/e2e/invalid-recipes/` (output `dist-e2e-invalid`, ignored by git, tsc and oxlint).
