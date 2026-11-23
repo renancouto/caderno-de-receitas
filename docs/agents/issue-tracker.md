@@ -18,6 +18,12 @@ Create a new file under `.scratch/<feature-slug>/` (creating the directory if ne
 
 Read the file at the referenced path. The user will normally pass the path or the issue number directly.
 
+## When a ticket is finished (closing work)
+
+1. Set its `Status:` line to `done`. Keep the file: other tickets refer to it by number, and it records what was built.
+2. Append a short note under `## Comments`: what changed compared with the ticket, and anything the next tickets should know.
+3. Re-read every ticket it was blocking. If the implementation changed something they assume, update them now, and mention it in the note.
+
 ## Wayfinding operations
 
 Used by `/wayfinder`. The **map** is a file with one **child** file per ticket.

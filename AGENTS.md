@@ -1,5 +1,10 @@
 # recipe-app
 
+## Conventions
+
+- Pin every dependency to an exact version (no `^` or `~`), and commit the lockfile.
+- Format with Oxfmt, lint with Oxlint, type check with `astro check`. Run the project's `check` script before handing back any change.
+
 ## Agent skills
 
 The engineering skills in `.agents/skills/` are not committed. Restore them from `skills-lock.json` with `npx skills install`. Project-specific skills (`add-recipe`, `log-cook`) are committed; add a `.gitignore` exception for any new one.
