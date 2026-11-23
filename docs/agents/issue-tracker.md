@@ -24,6 +24,15 @@ Read the file at the referenced path. The user will normally pass the path or th
 2. Append a short note under `## Comments`: what changed compared with the ticket, and anything the next tickets should know.
 3. Re-read every ticket it was blocking. If the implementation changed something they assume, update them now, and mention it in the note.
 
+## Landing a ticket on `main`
+
+Each ticket lands as **one squashed commit** on `main`, with history in a straight line.
+
+1. The implementer works on its own `ticket-NN` branch and worktree, based on the latest `main`, committing as often as it likes.
+2. After loop-review is finished, rebase onto the latest `main` and squash the branch into one commit: a subject of 72 characters or fewer, and `Closes NN` in the body.
+3. Fast-forward `main` to it, with no merge commits, and push.
+4. Delete the ticket's branch and worktree.
+
 ## Wayfinding operations
 
 Used by `/wayfinder`. The **map** is a file with one **child** file per ticket.
