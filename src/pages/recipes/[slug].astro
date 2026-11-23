@@ -1,6 +1,8 @@
 ---
 import { getCollection } from "astro:content";
+import { IngredientList } from "../../components/IngredientList";
 import { RecipePage } from "../../components/RecipePage";
+import { StepList } from "../../components/StepList";
 import Page from "../../layouts/Page.astro";
 import type { Recipe } from "../../lib/recipe-rules";
 
@@ -16,5 +18,8 @@ const { recipe } = Astro.props;
 ---
 
 <Page title={recipe.title}>
-  <RecipePage recipe={recipe} />
+  <RecipePage recipe={recipe}>
+    <IngredientList slot="ingredients" groups={recipe.ingredients} client:load />
+    <StepList slot="steps" steps={recipe.steps} client:load />
+  </RecipePage>
 </Page>

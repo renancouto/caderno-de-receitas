@@ -66,3 +66,38 @@ test("Ingredients sit beside the Steps on a wide screen and above them on a phon
   expect(b!.x).toBeGreaterThan(a!.x + a!.width - 1);
   expect(Math.abs(b!.y - a!.y)).toBeLessThan(2);
 });
+
+test("an Ingredient and a Step can be ticked off and unticked", async ({ page }) => {
+  await page.goto("recipes/carbonara-picante");
+  const ingredient = page.getByRole("button", { name: /Espaguete/ });
+  const step = page.getByRole("button", { name: /Cozinhe a massa/ });
+  await expect(ingredient).toHaveAttribute("aria-pressed", "false");
+  await ingredient.click();
+  await step.click();
+  await expect(ingredient).toHaveAttribute("aria-pressed", "true");
+  await expect(step).toHaveAttribute("aria-pressed", "true");
+  await ingredient.click();
+  await expect(ingredient).toHaveAttribute("aria-pressed", "false");
+  await page.reload();
+  await expect(step).toHaveAttribute("aria-pressed", "false");
+});
+
+test("the Recipe page ships JavaScript only for the tick-off lists", async ({ page }) => {
+  await page.goto("recipes/carbonara-picante");
+  await expect(page.locator("astro-island")).toHaveCount(2);
+  await expect(page.locator("astro-island[client]")).toHaveCount(2);
+});
+
+test.describe("without JavaScript", () => {
+  test.use({ javaScriptEnabled: false });
+  test("the lists render as plain lists", async ({ page }) => {
+    await page.goto("recipes/carbonara-picante");
+    await expect(page.getByRole("button")).toHaveCount(0);
+    await expect(
+      page.getByRole("region", { name: "Ingredientes" }).getByRole("listitem"),
+    ).not.toHaveCount(0);
+    await expect(
+      page.getByRole("region", { name: "Preparo" }).getByRole("listitem"),
+    ).not.toHaveCount(0);
+  });
+});

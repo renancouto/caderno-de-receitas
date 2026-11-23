@@ -12,6 +12,7 @@
   --color-ink: #1d1c1a;
   --color-muted: #6f6a62;
   --color-accent: #8a5a3b;
+  --color-accent-faint: #a8826a; /* large text only: 3.16:1 on ivory */
   --color-panel: #efe5d3;
 
   --font-heading: "Fraunces", Georgia, serif;

@@ -1,3 +1,4 @@
+import type { ComponentChildren } from "preact";
 import { url } from "../lib/paths";
 import type { Recipe } from "../lib/recipe-rules";
 import { CookLog } from "./CookLog";
@@ -8,7 +9,14 @@ import { SourceCredit } from "./SourceCredit";
 import { StepList } from "./StepList";
 import "./RecipePage.css";
 
-export function RecipePage({ recipe }: { recipe: Recipe }) {
+type RecipePageProps = {
+  recipe: Recipe;
+  // Astro passes hydrated islands for the tickable lists through these slots.
+  ingredients?: ComponentChildren;
+  steps?: ComponentChildren;
+};
+
+export function RecipePage({ recipe, ingredients, steps }: RecipePageProps) {
   return (
     <main>
       <header class="recipe-header">
@@ -31,9 +39,9 @@ export function RecipePage({ recipe }: { recipe: Recipe }) {
       <div class="recipe-wide">
         <FactsStrip recipe={recipe} />
         <div class="recipe-columns">
-          <IngredientList groups={recipe.ingredients} />
+          {ingredients ?? <IngredientList groups={recipe.ingredients} />}
           <div>
-            <StepList steps={recipe.steps} />
+            {steps ?? <StepList steps={recipe.steps} />}
             {recipe.notes && <RecipeNotes notes={recipe.notes} />}
           </div>
         </div>
