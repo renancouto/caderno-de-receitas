@@ -26,12 +26,14 @@ Read the file at the referenced path. The user will normally pass the path or th
 
 ## Landing a ticket on `main`
 
-Each ticket lands as **one squashed commit** on `main`, with history in a straight line.
+Each ticket lands as **one squashed commit** on `main` through a pull request. `main` is protected: it takes no direct pushes, and a PR merges only when the checks "Format, lint, types, unit tests", "Component and end-to-end tests" and "Screenshot tests" pass (branch protection matches these job names, so renaming a job means updating it).
 
 1. The implementer works on its own `ticket-NN` branch and worktree, based on the latest `main`, committing as often as it likes.
-2. After loop-review is finished, rebase onto the latest `main` and squash the branch into one commit: a subject of 72 characters or fewer, and `Closes NN` in the body.
-3. Fast-forward `main` to it, with no merge commits, and push.
-4. Delete the ticket's branch and worktree.
+2. After loop-review is finished, rebase onto the latest `main`, push the branch, and open a PR with `gh pr create`. The PR title becomes the commit subject (72 characters or fewer); the body becomes the commit message and ends with `Closes NN`.
+3. Wait with `gh pr checks <n> --watch`. If a check fails, fix it on the branch, send the fix through loop-review, and push again.
+4. Merge with `gh pr merge <n> --squash`. GitHub deletes the remote branch; delete the local branch and worktree.
+
+Changes that aren't a ticket (docs, a ticket's status) go through a short PR the same way.
 
 ## Wayfinding operations
 
