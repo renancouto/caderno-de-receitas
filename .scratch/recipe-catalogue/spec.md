@@ -8,7 +8,7 @@ My recipes are scattered: some are my own, some I adapted from several places, a
 
 ## Solution
 
-A personal Catalogue of Recipes published as a static website in Brazilian Portuguese, which I own entirely. Each Recipe is a file in a git repository with every quantity in a Standard Unit. A Recipe may be my own, with no Source, or adapted from one or more Sources, which are kept only as credit links and whose text is rewritten in my own words. I add Recipes and log Cooks by talking to my coding agent through two project skills (`@add-recipe` and `@log-cook`), which write the files; GitHub Actions tests the site and publishes it to GitHub Pages on every push.
+A personal Catalogue of Recipes, named **Caderno de receitas**, published as a static website in Brazilian Portuguese, which I own entirely. Each Recipe is a file in a git repository with every quantity in a Standard Unit. A Recipe may be my own, with no Source, or adapted from one or more Sources, which are kept only as credit links and whose text is rewritten in my own words. I add Recipes and log Cooks by talking to my coding agent through two project skills (`@add-recipe` and `@log-cook`), which write the files; GitHub Actions tests the site and publishes it to GitHub Pages on every push.
 
 The site has two pages: a cookbook-style A–Z index of the Catalogue with search, sorting and Tag filtering, and an editorial Recipe page designed for reading on a phone while cooking, where Ingredients and Steps can be ticked off.
 
@@ -146,6 +146,7 @@ The site has two pages: a cookbook-style A–Z index of the Catalogue with searc
 ### Design
 
 - The design is fixed by the UI prototype on the `prototype/ui` branch and recorded in `.scratch/recipe-catalogue/design-verdict.md`: layout C on both pages, Fraunces (light) for headings, Newsreader for reading text, Libre Caslon Text for labels, quantities and dates, ivory background `#f9f4ea`, lines `#e6dccb`, ink `#1d1c1a`, muted `#6f6a62`, accent `#8a5a3b`.
+- The site name "Caderno de receitas" appears above the index title and in every page's browser title (e.g. "Carbonara picante · Caderno de receitas").
 - The prototype code itself is not reused; it is rewritten properly as components with tests.
 - Fonts are self-hosted rather than loaded from Google Fonts, so the site doesn't depend on a third party.
 
