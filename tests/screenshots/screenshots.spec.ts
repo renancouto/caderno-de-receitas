@@ -18,7 +18,18 @@ test("recipe page", async ({ page }) => {
   await expect(page).toHaveScreenshot("page-recipe.png", { fullPage: true });
 });
 
-for (const id of ["components-indexpage--one-recipe", "components-recipepage--default"]) {
+test("full recipe page", async ({ page }) => {
+  await page.goto("recipes/bolo-de-cenoura");
+  await settle(page);
+  await expect(page).toHaveScreenshot("page-recipe-full.png", { fullPage: true });
+});
+
+for (const id of [
+  "components-indexpage--one-recipe",
+  "components-recipepage--complete",
+  "components-recipepage--minimal",
+  "components-recipepage--long-title",
+]) {
   test(`story ${id}`, async ({ page }) => {
     await page.goto(`${storybook}/iframe.html?id=${id}&viewMode=story`);
     await page.locator("#storybook-root > *").first().waitFor();

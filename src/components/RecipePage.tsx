@@ -1,51 +1,45 @@
-import type { Ingredient, Recipe } from "../lib/recipe-rules";
 import { url } from "../lib/paths";
+import type { Recipe } from "../lib/recipe-rules";
+import { CookLog } from "./CookLog";
+import { FactsStrip } from "./FactsStrip";
+import { IngredientList } from "./IngredientList";
+import { RecipeNotes } from "./RecipeNotes";
+import { SourceCredit } from "./SourceCredit";
+import { StepList } from "./StepList";
 import "./RecipePage.css";
-
-const unitLabels = { g: "g", ml: "ml", l: "L", cup: "xícara" } as const;
-
-function formatQuantity(ingredient: Ingredient): string {
-  if ("toTaste" in ingredient) return "a gosto";
-  const amount = ingredient.quantity.toLocaleString("pt-BR");
-  if (!ingredient.unit) return amount;
-  const unit = unitLabels[ingredient.unit];
-  return `${amount} ${ingredient.unit === "cup" && ingredient.quantity > 1 ? `${unit}s` : unit}`;
-}
 
 export function RecipePage({ recipe }: { recipe: Recipe }) {
   return (
-    <main class="page">
-      <a class="link label back-link" href={url("/")}>
-        ← Todas as receitas
-      </a>
-      <h1 class="page-title">{recipe.title}</h1>
-      <section aria-labelledby="ingredients-heading">
-        <h2 id="ingredients-heading" class="section-title">
-          Ingredientes
-        </h2>
-        {recipe.ingredients.map((group, index) => (
-          <ul key={group.name ?? index} class="plain-list">
-            {group.items.map((ingredient) => (
-              <li key={ingredient.name} class="ingredient">
-                <span>{ingredient.name}</span>
-                <span class="quantity">{formatQuantity(ingredient)}</span>
-              </li>
-            ))}
-          </ul>
-        ))}
-      </section>
-      <section aria-labelledby="steps-heading">
-        <h2 id="steps-heading" class="section-title">
-          Preparo
-        </h2>
-        <ol class="steps">
-          {recipe.steps.map((step, index) => (
-            <li key={index} class="step">
-              {step}
-            </li>
-          ))}
-        </ol>
-      </section>
+    <main>
+      <header class="recipe-header">
+        <div class="recipe-wide">
+          <a class="link label" href={url("/")}>
+            ← Todas as receitas
+          </a>
+          <h1 class="recipe-title">{recipe.title}</h1>
+          {recipe.tags && recipe.tags.length > 0 && (
+            <ul class="plain-list recipe-tags" aria-label="Tags">
+              {recipe.tags.map((tag) => (
+                <li key={tag} class="label recipe-tag">
+                  {tag}
+                </li>
+              ))}
+            </ul>
+          )}
+        </div>
+      </header>
+      <div class="recipe-wide">
+        <FactsStrip recipe={recipe} />
+        <div class="recipe-columns">
+          <IngredientList groups={recipe.ingredients} />
+          <div>
+            <StepList steps={recipe.steps} />
+            {recipe.notes && <RecipeNotes notes={recipe.notes} />}
+          </div>
+        </div>
+        {recipe.log && recipe.log.length > 0 && <CookLog log={recipe.log} />}
+        {recipe.sources && recipe.sources.length > 0 && <SourceCredit sources={recipe.sources} />}
+      </div>
     </main>
   );
 }
