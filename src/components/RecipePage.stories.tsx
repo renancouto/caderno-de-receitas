@@ -130,7 +130,7 @@ export const Minimal: Story = {
   args: { recipe: minimal },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
-    await expect(facts(canvasElement)).toEqual({ Nota: "Sem nota", "Vezes feita": "0" });
+    await expect(facts(canvasElement)).toEqual({ Nota: "Sem nota", "Vezes feita": "Nunca feita" });
     await expect(canvas.queryByRole("list", { name: "Tags" })).toBeNull();
     await expect(canvas.queryByRole("heading", { level: 3 })).toBeNull();
     await expect(canvas.queryByRole("region", { name: "Notas" })).toBeNull();

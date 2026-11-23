@@ -43,7 +43,7 @@ test("a full Recipe page shows every part of the Recipe", async ({ page }) => {
 
 test("a minimal Recipe page leaves out what the Recipe doesn't have", async ({ page }) => {
   await page.goto("recipes/carbonara-picante");
-  await expect(page.locator(".fact")).toHaveText(["NotaSem nota", "Vezes feita0"]);
+  await expect(page.locator(".fact")).toHaveText(["NotaSem nota", "Vezes feitaNunca feita"]);
   await expect(page.getByRole("list", { name: "Tags" })).toHaveCount(0);
   await expect(page.getByRole("region", { name: "Notas" })).toHaveCount(0);
   await expect(page.getByRole("region", { name: "Histórico" })).toHaveCount(0);
