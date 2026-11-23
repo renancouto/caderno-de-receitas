@@ -27,7 +27,7 @@ export function FactsStrip({ recipe }: { recipe: Recipe }) {
   return (
     <dl class="facts">
       <Fact label="Nota">{recipe.rating ? <Rating rating={recipe.rating} /> : "Sem nota"}</Fact>
-      <Fact label="Vezes feita">{formatNumber(timesMade)}</Fact>
+      <Fact label="Vezes feita">{timesMade ? formatNumber(timesMade) : "Nunca feita"}</Fact>
       {lastMade && (
         <Fact label="Última">
           <time dateTime={lastMade}>{formatDate(lastMade)}</time>
