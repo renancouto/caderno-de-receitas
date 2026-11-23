@@ -20,7 +20,7 @@ Read the file at the referenced path. The user will normally pass the path or th
 
 ## When a ticket is finished (closing work)
 
-1. Set its `Status:` line to `done`. Keep the file: other tickets refer to it by number, and it records what was built.
+1. Set its `Status:` line to `done` and tick every checklist box the work satisfies; leave a box unticked only if the note says why. Keep the file: other tickets refer to it by number, and it records what was built.
 2. Append a short note under `## Comments`: what changed compared with the ticket, and anything the next tickets should know.
 3. Re-read every ticket it was blocking. If the implementation changed something they assume, update them now, and mention it in the note.
 

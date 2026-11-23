@@ -1,3 +1,5 @@
+import { url } from "../lib/paths";
+
 export type IndexEntry = { slug: string; title: string };
 
 export function IndexPage({ recipes }: { recipes: IndexEntry[] }) {
@@ -7,7 +9,7 @@ export function IndexPage({ recipes }: { recipes: IndexEntry[] }) {
       <ul>
         {recipes.map((recipe) => (
           <li key={recipe.slug}>
-            <a href={`/recipes/${recipe.slug}`}>{recipe.title}</a>
+            <a href={url(`/recipes/${recipe.slug}`)}>{recipe.title}</a>
           </li>
         ))}
       </ul>

@@ -1,4 +1,5 @@
 import type { Ingredient, Recipe } from "../lib/recipe-rules";
+import { url } from "../lib/paths";
 import "./RecipePage.css";
 
 const unitLabels = { g: "g", ml: "ml", l: "L", cup: "xícara" } as const;
@@ -14,7 +15,7 @@ function formatQuantity(ingredient: Ingredient): string {
 export function RecipePage({ recipe }: { recipe: Recipe }) {
   return (
     <main class="recipe-page">
-      <a href="/">← Todas as receitas</a>
+      <a href={url("/")}>← Todas as receitas</a>
       <h1>{recipe.title}</h1>
       <section aria-labelledby="ingredients-heading">
         <h2 id="ingredients-heading">Ingredientes</h2>

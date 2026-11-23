@@ -1,8 +1,10 @@
 import { defineConfig, devices } from "@playwright/test";
 
+const baseURL = "http://localhost:4322/caderno-de-receitas/";
+
 export default defineConfig({
   testDir: "tests/e2e",
-  use: { baseURL: "http://localhost:4322" },
+  use: { baseURL },
   projects: [{ name: "chromium", use: { ...devices["Desktop Chrome"] } }],
   webServer: {
     // `--ignore-lock` keeps the server in the foreground: when Astro detects a coding
@@ -10,7 +12,7 @@ export default defineConfig({
     // as a crash and which leaves the server running.
     command: "astro preview --port 4322 --ignore-lock",
     env: { OUT_DIR: "dist-e2e" },
-    url: "http://localhost:4322",
+    url: baseURL,
     reuseExistingServer: false,
   },
 });
