@@ -6,7 +6,7 @@
 - Format with Oxfmt, lint with Oxlint, type check with `astro check`. Run the project's `check` script before handing back any change.
 - Keep CSS selectors flat: one class per rule (`.ingredient`), not descendant chains (`.recipe-page ol li`). Give the element its own class instead. Oxlint doesn't lint CSS, so nothing checks this.
 - After a visual change, run `pnpm test:screenshots` (Docker, linux/amd64; not part of `check`). For intended changes, update references with `pnpm test:screenshots:update`, never on macOS. Apple silicon needs a Docker host with Rosetta (e.g. `colima start -p cilinux-fast`).
-- Use the colour, font and spacing properties in `src/styles/tokens.css`; add any new text colour pair to `src/styles/contrast.test.ts`.
+- Use the colour, font and spacing properties in `src/styles/tokens.css`. Colour contrast is checked by axe (Storybook a11y addon and `tests/e2e/accessibility.spec.ts`).
 
 ## Agent skills
 
