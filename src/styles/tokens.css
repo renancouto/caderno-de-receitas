@@ -12,6 +12,7 @@
   --color-ink: #1d1c1a;
   --color-muted: #6f6a62;
   --color-accent: #8a5a3b;
+  --color-panel: #efe5d3;
 
   --font-heading: "Fraunces", Georgia, serif;
   --font-body: "Newsreader", Georgia, serif;
@@ -31,5 +32,9 @@
   --space-5: 2.5rem;
   --space-6: 4rem;
 
+  --text-display: clamp(2.5rem, 9vw, 4.5rem);
+  --text-numeral: 2.5rem;
+
   --measure: 36rem;
+  --measure-wide: 64rem;
 }
