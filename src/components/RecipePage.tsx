@@ -14,13 +14,17 @@ function formatQuantity(ingredient: Ingredient): string {
 
 export function RecipePage({ recipe }: { recipe: Recipe }) {
   return (
-    <main class="recipe-page">
-      <a href={url("/")}>← Todas as receitas</a>
-      <h1>{recipe.title}</h1>
+    <main class="page">
+      <a class="link label back-link" href={url("/")}>
+        ← Todas as receitas
+      </a>
+      <h1 class="page-title">{recipe.title}</h1>
       <section aria-labelledby="ingredients-heading">
-        <h2 id="ingredients-heading">Ingredientes</h2>
+        <h2 id="ingredients-heading" class="section-title">
+          Ingredientes
+        </h2>
         {recipe.ingredients.map((group, index) => (
-          <ul key={group.name ?? index}>
+          <ul key={group.name ?? index} class="plain-list">
             {group.items.map((ingredient) => (
               <li key={ingredient.name} class="ingredient">
                 <span>{ingredient.name}</span>
@@ -31,10 +35,14 @@ export function RecipePage({ recipe }: { recipe: Recipe }) {
         ))}
       </section>
       <section aria-labelledby="steps-heading">
-        <h2 id="steps-heading">Preparo</h2>
-        <ol>
+        <h2 id="steps-heading" class="section-title">
+          Preparo
+        </h2>
+        <ol class="steps">
           {recipe.steps.map((step, index) => (
-            <li key={index}>{step}</li>
+            <li key={index} class="step">
+              {step}
+            </li>
           ))}
         </ol>
       </section>

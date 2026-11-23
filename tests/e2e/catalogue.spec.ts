@@ -14,3 +14,16 @@ test("the index lists a Recipe that links to its Recipe page", async ({ page }) 
     "Misture com os ovos.",
   ]);
 });
+
+test("pages load their fonts from the site itself", async ({ page, baseURL }) => {
+  const origins = new Set<string>();
+  page.on("request", (request) => origins.add(new URL(request.url()).origin));
+  await page.goto("recipes/carbonara-picante");
+  await page.evaluate(() => document.fonts.ready);
+
+  const loaded = await page.evaluate(() =>
+    [...document.fonts].filter((font) => font.status === "loaded").map((font) => font.family),
+  );
+  expect(new Set(loaded)).toEqual(new Set(["Fraunces", "Newsreader", "Libre Caslon Text"]));
+  expect([...origins]).toEqual([new URL(baseURL!).origin]);
+});
