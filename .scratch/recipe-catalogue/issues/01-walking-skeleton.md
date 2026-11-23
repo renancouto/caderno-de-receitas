@@ -16,7 +16,8 @@
 - [ ] Playwright end-to-end test that builds the site from a test Recipes folder and checks the index entry and Recipe page
 - [ ] One `package.json` script runs each test layer, and one runs all of them
 - [ ] Dependencies are pinned to exact versions (no `^` or `~` ranges), the package manager is configured to save exact versions by default, and the lockfile is committed
-- [ ] Formatting with Oxfmt, including `.astro` files (its Astro support needs `@astrojs/compiler-rs` installed and the `astro` option turned on)
+- [ ] An `.npmrc` with `save-exact=true`, and a check (part of `check`) that fails if any version in `package.json` is a range
+- [ ] Formatting with Oxfmt, including `.astro` files (its Astro support needs `@astrojs/compiler-rs` installed and the `astro` option turned on); a comment in the Oxfmt config explains this
 - [ ] Linting with Oxlint
 - [ ] Type checking with `astro check`, which covers `.astro` and TypeScript files (Oxc has no type checker)
 - [ ] Scripts for formatting, checking formatting, linting and type checking, and a single `check` script that runs all of them plus the tests
