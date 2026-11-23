@@ -40,13 +40,31 @@ jobs:
       - run: pnpm test:components
       - run: pnpm test:e2e
 
-  # Later tickets add their jobs here (screenshot tests, photo location check)
+  screenshots:
+    name: Screenshot tests
+    runs-on: ubuntu-latest
+    # Same image as `pnpm test:screenshots`; keep the tag equal to @playwright/test.
+    container:
+      image: mcr.microsoft.com/playwright:v1.65.1-noble
+      options: --ipc=host
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm screenshots:run
+      - if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: screenshot-diffs
+          path: test-results/
+
+  # Later tickets add their jobs here (photo location check)
   # and list them in `needs` of the deploy job.
 
   build:
     name: Build site
     if: github.event_name == 'push' && github.ref == 'refs/heads/main'
-    needs: [static, browser]
+    needs: [static, browser, screenshots]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4

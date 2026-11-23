@@ -5,6 +5,8 @@
 - Pin every dependency to an exact version, and commit the lockfile. Add and upgrade dependencies only with `pnpm add <name>@<version>` (`.npmrc` saves it exact); nothing checks hand-edited versions in `package.json`. The site ships only static files, so every package goes in `devDependencies` (`pnpm add -D`).
 - Format with Oxfmt, lint with Oxlint, type check with `astro check`. Run the project's `check` script before handing back any change.
 - Keep CSS selectors flat: one class per rule (`.ingredient`), not descendant chains (`.recipe-page ol li`). Give the element its own class instead. Oxlint doesn't lint CSS, so nothing checks this.
+- After a visual change, run `pnpm test:screenshots` (Docker, linux/amd64; not part of `check`). For intended changes, update references with `pnpm test:screenshots:update`, never on macOS. Apple silicon needs a Docker host with Rosetta (e.g. `colima start -p cilinux-fast`).
+- Use the colour, font and spacing properties in `src/styles/tokens.css`; add any new text colour pair to `src/styles/contrast.test.ts`.
 
 ## Agent skills
 
