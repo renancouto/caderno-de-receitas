@@ -7,3 +7,7 @@ dist/
 .agents/skills/*
 !.agents/skills/add-recipe/
 !.agents/skills/log-cook/
+dist-e2e/
+playwright-report/
+test-results/
+storybook-static/

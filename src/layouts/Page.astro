@@ -1,0 +1,17 @@
+---
+type Props = { title?: string };
+const siteName = "Caderno de receitas";
+const { title } = Astro.props;
+---
+
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title ? `${title} · ${siteName}` : siteName}</title>
+  </head>
+  <body>
+    <slot />
+  </body>
+</html>

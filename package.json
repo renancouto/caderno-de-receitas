@@ -1,0 +1,47 @@
+{
+  "name": "caderno-de-receitas",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "storybook": "storybook dev -p 6006",
+    "format": "oxfmt",
+    "format:check": "oxfmt --check",
+    "lint": "oxlint --deny-warnings",
+    "typecheck": "astro check",
+    "test:unit": "vitest run --project unit",
+    "test:components": "vitest run --project storybook",
+    "test:e2e": "RECIPES_DIR=tests/e2e/recipes OUT_DIR=dist-e2e astro build && playwright test",
+    "test": "pnpm test:unit && pnpm test:components && pnpm test:e2e",
+    "check": "pnpm format:check && pnpm lint && pnpm typecheck && pnpm test"
+  },
+  "devDependencies": {
+    "@astrojs/check": "0.9.12",
+    "@astrojs/compiler-rs": "0.5.3",
+    "@astrojs/preact": "6.1.6",
+    "@playwright/test": "1.65.1",
+    "@storybook/addon-a11y": "10.6.8",
+    "@storybook/addon-vitest": "10.6.8",
+    "@storybook/preact-vite": "10.6.8",
+    "@types/node": "24.19.2",
+    "@vitest/browser": "5.1.1",
+    "@vitest/browser-playwright": "5.1.1",
+    "astro": "7.4.13",
+    "oxfmt": "0.79.0",
+    "oxlint": "1.94.0",
+    "playwright": "1.65.1",
+    "preact": "11.2.0",
+    "storybook": "10.6.8",
+    "typescript": "6.0.3",
+    "vite": "8.3.8",
+    "vitest": "5.1.1",
+    "yaml": "2.9.1"
+  },
+  "pnpm": {
+    "onlyBuiltDependencies": [
+      "esbuild"
+    ]
+  }
+}

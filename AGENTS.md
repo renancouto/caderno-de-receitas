@@ -2,7 +2,7 @@
 
 ## Conventions
 
-- Pin every dependency to an exact version (no `^` or `~`), and commit the lockfile.
+- Pin every dependency to an exact version, and commit the lockfile. Add and upgrade dependencies only with `pnpm add <name>@<version>` (`.npmrc` saves it exact); nothing checks hand-edited versions in `package.json`. The site ships only static files, so every package goes in `devDependencies` (`pnpm add -D`).
 - Format with Oxfmt, lint with Oxlint, type check with `astro check`. Run the project's `check` script before handing back any change.
 
 ## Agent skills

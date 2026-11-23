@@ -1,0 +1,8 @@
+{
+  "$schema": "./node_modules/oxfmt/configuration_schema.json",
+  "printWidth": 100,
+  // Formats .astro files through prettier-plugin-astro. Oxfmt does not bundle
+  // its parser, so `@astrojs/compiler-rs` must stay installed as a dev dependency.
+  "astro": true,
+  "ignorePatterns": ["pnpm-lock.yaml", ".scratch/**"],
+}

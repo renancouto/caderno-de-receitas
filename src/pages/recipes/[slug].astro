@@ -1,0 +1,20 @@
+---
+import { getCollection } from "astro:content";
+import { RecipePage } from "../../components/RecipePage";
+import Page from "../../layouts/Page.astro";
+import type { Recipe } from "../../lib/recipe-rules";
+
+export async function getStaticPaths() {
+  const entries = await getCollection("recipes");
+  return entries.map((entry) => ({
+    params: { slug: entry.id },
+    props: { recipe: entry.data as Recipe },
+  }));
+}
+
+const { recipe } = Astro.props;
+---
+
+<Page title={recipe.title}>
+  <RecipePage recipe={recipe} />
+</Page>

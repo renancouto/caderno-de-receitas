@@ -1,0 +1,15 @@
+---
+import { getCollection } from "astro:content";
+import { IndexPage } from "../components/IndexPage";
+import Page from "../layouts/Page.astro";
+import type { Recipe } from "../lib/recipe-rules";
+
+const recipes = (await getCollection("recipes")).map((entry) => ({
+  slug: entry.id,
+  title: (entry.data as Recipe).title,
+}));
+---
+
+<Page>
+  <IndexPage recipes={recipes} />
+</Page>
