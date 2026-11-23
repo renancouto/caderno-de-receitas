@@ -1,0 +1,88 @@
+.recipe-section {
+  margin-bottom: var(--space-5);
+}
+
+.ingredient-group-title {
+  margin: var(--space-4) 0 var(--space-1);
+  font-family: var(--font-label);
+  font-size: var(--text-small);
+  font-weight: 400;
+  color: var(--color-accent);
+}
+
+.ingredient {
+  border-bottom: 1px solid var(--color-line);
+}
+
+.ingredient-tick {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: var(--space-3);
+  padding: var(--space-2) 0;
+}
+
+.tick {
+  width: 100%;
+  margin: 0;
+  border: 0;
+  background: none;
+  font: inherit;
+  color: inherit;
+  text-align: left;
+  text-decoration: inherit;
+}
+
+button.tick {
+  cursor: pointer;
+}
+
+.tick:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
+}
+
+.quantity-ticked {
+  color: var(--color-muted);
+}
+
+.tick-struck {
+  color: var(--color-muted);
+  text-decoration: line-through;
+}
+
+.quantity {
+  font-family: var(--font-label);
+  font-size: var(--text-small);
+  color: var(--color-accent);
+  text-align: right;
+  white-space: nowrap;
+}
+
+.steps {
+  counter-reset: step;
+}
+
+.step {
+  display: grid;
+  grid-template-columns: 3rem 1fr;
+  padding: var(--space-2) 0 var(--space-3);
+  counter-increment: step;
+}
+
+.step-tick {
+  grid-column: 2;
+}
+
+.step::before {
+  content: counter(step);
+  font-family: var(--font-heading);
+  font-size: var(--text-numeral);
+  font-weight: 300;
+  line-height: 1;
+  color: var(--color-accent);
+}
+
+.step-ticked::before {
+  color: var(--color-accent-faint);
+}

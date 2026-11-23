@@ -25,7 +25,7 @@ const storybook = {
 export default defineConfig({
   use: { baseURL },
   snapshotPathTemplate: "tests/screenshots/references/{arg}{ext}",
-  expect: { toHaveScreenshot: { maxDiffPixels: 0 } },
+  expect: { toHaveScreenshot: { maxDiffPixels: 0, threshold: 0 } },
   projects: screenshots
     ? [{ name: "screenshots", testDir: "tests/screenshots", use: { ...devices["Pixel 7"] } }]
     : [{ name: "e2e", testDir: "tests/e2e", use: { ...devices["Desktop Chrome"] } }],

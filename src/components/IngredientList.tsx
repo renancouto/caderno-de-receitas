@@ -1,7 +1,11 @@
 import { formatQuantity } from "../lib/format";
 import type { IngredientGroup } from "../lib/recipe-rules";
+import { TickItem } from "./TickItem";
+import { useTicks } from "./useTicks";
+import "./RecipeLists.css";
 
 export function IngredientList({ groups }: { groups: IngredientGroup[] }) {
+  const { ready, isTicked, toggle } = useTicks();
   return (
     <section class="recipe-section" aria-labelledby="ingredients-heading">
       <h2 id="ingredients-heading" class="section-title">
@@ -12,10 +16,18 @@ export function IngredientList({ groups }: { groups: IngredientGroup[] }) {
           {group.name && <h3 class="ingredient-group-title">{group.name}</h3>}
           <ul class="plain-list">
             {group.items.map((ingredient) => (
-              <li key={ingredient.name} class="ingredient">
+              <TickItem
+                key={ingredient.name}
+                class="ingredient"
+                ready={ready}
+                ticked={isTicked(ingredient.name)}
+                onToggle={() => toggle(ingredient.name)}
+              >
                 <span>{ingredient.name}</span>
-                <span class="quantity">{formatQuantity(ingredient)}</span>
-              </li>
+                <span class={isTicked(ingredient.name) ? "quantity quantity-ticked" : "quantity"}>
+                  {formatQuantity(ingredient)}
+                </span>
+              </TickItem>
             ))}
           </ul>
         </div>
