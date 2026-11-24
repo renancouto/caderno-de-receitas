@@ -47,6 +47,8 @@ const ticks: Record<string, number> = {
 for (const id of [
   "components-indexpage--one-recipe",
   "components-indexpage--catalogue",
+  "components-indexpage--sorted-by-rating",
+  "components-indexpage--filtered-by-tag",
   "components-indexentry--rated",
   "components-indexentry--not-rated",
   "components-indexentry--never-made-without-time",

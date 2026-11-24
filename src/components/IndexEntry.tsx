@@ -1,4 +1,5 @@
-import { formatMinutes, formatTimesMade } from "../lib/format";
+import type { Order } from "../lib/catalogue-view";
+import { formatDate, formatMinutes, formatNumber, formatTimesMade } from "../lib/format";
 import { url } from "../lib/paths";
 import "./IndexEntry.css";
 
@@ -8,9 +9,19 @@ export type IndexRecipe = {
   rating?: number;
   totalMinutes?: number;
   timesMade: number;
+  lastMade?: string;
+  tags?: string[];
 };
 
-function Rating({ rating }: { rating?: number }) {
+function timesMadeValue(recipe: IndexRecipe): string {
+  return recipe.timesMade === 0 ? "—" : `${formatNumber(recipe.timesMade)}×`;
+}
+
+function lastMadeValue(recipe: IndexRecipe): string {
+  return recipe.lastMade ? formatDate(recipe.lastMade) : "—";
+}
+
+function RatingValue({ rating }: { rating?: number }) {
   return (
     <span class="index-entry-value">
       <span aria-hidden="true">{rating ? "★".repeat(rating) + "☆".repeat(5 - rating) : "—"}</span>
@@ -19,7 +30,21 @@ function Rating({ rating }: { rating?: number }) {
   );
 }
 
-export function IndexEntry({ recipe }: { recipe: IndexRecipe }) {
+function Value({ recipe, order }: { recipe: IndexRecipe; order: Order }) {
+  if (order === "times-made")
+    return <span class="index-entry-value">{timesMadeValue(recipe)}</span>;
+  if (order === "least-recent")
+    return <span class="index-entry-value">{lastMadeValue(recipe)}</span>;
+  return <RatingValue rating={recipe.rating} />;
+}
+
+export function IndexEntry({
+  recipe,
+  order = "alphabetical",
+}: {
+  recipe: IndexRecipe;
+  order?: Order;
+}) {
   const details = [
     recipe.totalMinutes === undefined ? undefined : formatMinutes(recipe.totalMinutes),
     formatTimesMade(recipe.timesMade),
@@ -29,7 +54,7 @@ export function IndexEntry({ recipe }: { recipe: IndexRecipe }) {
       <a class="index-entry-link" href={url(`/recipes/${recipe.slug}`)}>
         <span class="index-entry-title">{recipe.title}</span>
         <span class="index-entry-leader" aria-hidden="true" />
-        <Rating rating={recipe.rating} />
+        <Value recipe={recipe} order={order} />
       </a>
       <p class="index-entry-details">{details.join(" · ")}</p>
     </li>
