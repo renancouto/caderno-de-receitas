@@ -101,3 +101,29 @@ test.describe("without JavaScript", () => {
     ).not.toHaveCount(0);
   });
 });
+
+test("the first Photo is the header image, served resized in modern formats", async ({ page }) => {
+  await page.goto("recipes/bolo-de-cenoura");
+  const image = page.locator(".recipe-photo");
+  await expect(image).toBeVisible();
+  await expect
+    .poll(() => image.evaluate((img: HTMLImageElement) => img.complete && img.naturalWidth))
+    .toBeGreaterThan(0);
+
+  const sources = await page
+    .locator("picture source")
+    .evaluateAll((els) =>
+      els.map((el) => ({ type: el.getAttribute("type"), srcset: el.getAttribute("srcset") })),
+    );
+  expect(sources.map((source) => source.type)).toEqual(["image/avif", "image/webp"]);
+  for (const { srcset } of sources) expect(srcset).toMatch(/\.\w+\S* 480w, .* 1600w$/);
+  const shown = await image.evaluate((img: HTMLImageElement) => img.currentSrc);
+  expect(shown).toMatch(/\.(avif|webp)/);
+  expect(shown).not.toContain("capa.jpg");
+});
+
+test("a Recipe without a Photo has a plain header", async ({ page }) => {
+  await page.goto("recipes/carbonara-picante");
+  await expect(page.locator(".recipe-photo")).toHaveCount(0);
+  await expect(page.getByRole("heading", { level: 1 })).toBeVisible();
+});

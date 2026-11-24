@@ -37,6 +37,8 @@ for (const id of [
   "components-recipepage--long-title",
   "components-ingredientlist--ticked",
   "components-steplist--ticked",
+  "components-recipepage--with-photo",
+  "components-recipepage--long-title-with-photo",
 ]) {
   test(`story ${id}`, async ({ page }) => {
     await page.goto(`${storybook}/iframe.html?id=${id}&viewMode=story`);

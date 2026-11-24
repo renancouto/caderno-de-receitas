@@ -1,4 +1,5 @@
 import type { ComponentChildren } from "preact";
+import type { ResponsivePhoto } from "../lib/responsive-photo";
 import { url } from "../lib/paths";
 import type { Recipe } from "../lib/recipe-rules";
 import { CookLog } from "./CookLog";
@@ -11,17 +12,33 @@ import "./RecipePage.css";
 
 type RecipePageProps = {
   recipe: Recipe;
+  photo?: ResponsivePhoto;
   // Astro passes hydrated islands for the tickable lists through these slots.
   ingredients?: ComponentChildren;
   steps?: ComponentChildren;
 };
 
-export function RecipePage({ recipe, ingredients, steps }: RecipePageProps) {
+export function RecipePage({ recipe, photo, ingredients, steps }: RecipePageProps) {
   return (
     <main>
-      <header class="recipe-header">
+      <header class={photo ? "recipe-header has-photo" : "recipe-header"}>
+        {photo && (
+          <picture>
+            {photo.sources.map((source) => (
+              <source key={source.type} type={source.type} srcset={source.srcset} sizes="100vw" />
+            ))}
+            <img
+              class="recipe-photo"
+              src={photo.src}
+              width={photo.width}
+              height={photo.height}
+              alt=""
+              fetchpriority="high"
+            />
+          </picture>
+        )}
         <div class="recipe-wide">
-          <a class="link label" href={url("/")}>
+          <a class="recipe-back" href={url("/")}>
             ← Todas as receitas
           </a>
           <h1 class="recipe-title">{recipe.title}</h1>

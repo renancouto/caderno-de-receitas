@@ -5,20 +5,25 @@ import { RecipePage } from "../../components/RecipePage";
 import { StepList } from "../../components/StepList";
 import Page from "../../layouts/Page.astro";
 import type { Recipe } from "../../lib/recipe-rules";
+import { responsivePhoto } from "../../lib/responsive-photo";
 
 export async function getStaticPaths() {
   const entries = await getCollection("recipes");
   return entries.map((entry) => ({
     params: { slug: entry.id },
-    props: { recipe: entry.data as Recipe },
+    props: {
+      recipe: { ...entry.data, photos: undefined } as Recipe,
+      headerImage: entry.data.photos?.[0],
+    },
   }));
 }
 
-const { recipe } = Astro.props;
+const { recipe, headerImage } = Astro.props;
+const photo = headerImage ? await responsivePhoto(headerImage) : undefined;
 ---
 
 <Page title={recipe.title}>
-  <RecipePage recipe={recipe}>
+  <RecipePage recipe={recipe} photo={photo}>
     <IngredientList slot="ingredients" groups={recipe.ingredients} client:load />
     <StepList slot="steps" steps={recipe.steps} client:load />
   </RecipePage>

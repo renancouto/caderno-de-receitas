@@ -225,4 +225,34 @@ Fica melhor no dia seguinte.
       expect(problemsOf(contents, "Bad_Name.md")).toHaveLength(3);
     });
   });
+
+  describe("Photos", () => {
+    const withPhotos = valid.replace(
+      "ingredients:",
+      "photos: [carbonara-picante/capa.jpg, prato.png]\ningredients:",
+    );
+    const present = (...paths: string[]) => ({
+      fileExists: (path: string) => paths.includes(path),
+    });
+
+    it("keeps the Photos in order when they exist", () => {
+      const result = checkRecipe(
+        withPhotos,
+        validFileName,
+        present("carbonara-picante/capa.jpg", "prato.png"),
+      );
+      expect(result.ok && result.recipe.photos).toEqual([
+        "carbonara-picante/capa.jpg",
+        "prato.png",
+      ]);
+    });
+
+    it("names a Photo that doesn't exist", () => {
+      const result = checkRecipe(withPhotos, validFileName, present("prato.png"));
+      expect(result).toEqual({
+        ok: false,
+        problems: ['Photo "carbonara-picante/capa.jpg" does not exist.'],
+      });
+    });
+  });
 });

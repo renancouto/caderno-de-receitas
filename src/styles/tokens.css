@@ -14,6 +14,9 @@
   --color-accent: #8a5a3b;
   --color-accent-faint: #a8826a; /* large text only: 3.16:1 on ivory */
   --color-panel: #efe5d3;
+  --color-on-photo: #fff;
+  --color-photo-shade: 20 14 8; /* RGB channels for the header gradient over a Photo */
+  --color-photo-fallback: #2b2118;
 
   --font-heading: "Fraunces", Georgia, serif;
   --font-body: "Newsreader", Georgia, serif;

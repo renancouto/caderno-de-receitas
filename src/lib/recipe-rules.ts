@@ -1,5 +1,6 @@
 import { parse } from "yaml";
 import { z } from "zod";
+import { photoProblems } from "./photo-files.ts";
 
 const units = ["g", "ml", "l", "cup"] as const;
 const fileNamePattern = /^[a-z0-9]+(-[a-z0-9]+)*\.md$/;
@@ -114,7 +115,22 @@ function describeIssue(issue: z.core.$ZodIssue, data: unknown): string {
     : `Ingredient "${name}" has the unit "${String(unit)}"; use g, ml, l, cup, or no unit.`;
 }
 
-export function checkRecipe(contents: string, fileName: string): RecipeCheck {
+// Read from the raw data so a missing Photo is reported alongside other problems; a malformed list is reported by the schema.
+const listedPhotos = (data: unknown): string[] => {
+  const photos = lookup(data, ["photos"]);
+  return Array.isArray(photos) ? photos.filter((p): p is string => typeof p === "string") : [];
+};
+
+export type CheckOptions = {
+  /** Whether a file exists, given its path relative to the recipes folder. Photos are only checked when given. */
+  fileExists?: (path: string) => boolean;
+};
+
+export function checkRecipe(
+  contents: string,
+  fileName: string,
+  { fileExists }: CheckOptions = {},
+): RecipeCheck {
   const { data, body } = splitFile(contents);
   const parsed = frontMatterSchema.safeParse(data ?? {});
   const steps = readSteps(body);
@@ -126,6 +142,9 @@ export function checkRecipe(contents: string, fileName: string): RecipeCheck {
         ? []
         : [`The file name "${fileName}" must be lowercase kebab-case (like my-recipe.md).`]),
       ...(parsed.success ? [] : parsed.error.issues.map((issue) => describeIssue(issue, data))),
+      ...(fileExists
+        ? photoProblems(listedPhotos(data), fileName.replace(/\.md$/, ""), fileExists)
+        : []),
       ...(steps.length > 0
         ? []
         : ['The Recipe needs Steps: a numbered list under a "Preparo" heading.']),

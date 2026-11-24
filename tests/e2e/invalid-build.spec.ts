@@ -22,4 +22,6 @@ test("building with an invalid Recipe fails and names the file and problems", as
   expect(result.output).toContain("Bad_Name.md");
   expect(result.output).toContain("rating must be a whole number from 1 to 5");
   expect(result.output).toContain("tbsp");
+  expect(result.output).toContain("missing.jpg");
+  expect(result.output).toContain("does not exist");
 });

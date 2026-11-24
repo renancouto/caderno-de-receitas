@@ -7,6 +7,7 @@ servings: 12
 totalMinutes: 75
 tags: [sobremesa, café da tarde]
 rating: 4
+photos: [bolo-de-cenoura/capa.jpg]
 ingredients:
   - name: Massa
     items:
