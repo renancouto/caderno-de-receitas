@@ -42,3 +42,7 @@ export function formatDate(isoDate: string): string {
 export function sourceName(source: string): string {
   return new URL(source).hostname.replace(/^www\./, "");
 }
+
+export function formatTimesMade(timesMade: number): string {
+  return timesMade === 0 ? "Nunca feita" : `${formatNumber(timesMade)}×`;
+}

@@ -2,12 +2,19 @@
 import { getCollection } from "astro:content";
 import { IndexPage } from "../components/IndexPage";
 import Page from "../layouts/Page.astro";
+import { cookStats } from "../lib/cook-log";
 import type { Recipe } from "../lib/recipe-rules";
 
-const recipes = (await getCollection("recipes")).map((entry) => ({
-  slug: entry.id,
-  title: (entry.data as Recipe).title,
-}));
+const recipes = (await getCollection("recipes")).map((entry) => {
+  const recipe = entry.data as Recipe;
+  return {
+    slug: entry.id,
+    title: recipe.title,
+    rating: recipe.rating,
+    totalMinutes: recipe.totalMinutes,
+    timesMade: cookStats(recipe.log).timesMade,
+  };
+});
 ---
 
 <Page>

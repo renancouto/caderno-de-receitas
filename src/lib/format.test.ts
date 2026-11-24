@@ -1,5 +1,12 @@
 import { describe, expect, test } from "vitest";
-import { formatDate, formatMinutes, formatQuantity, formatNumber, sourceName } from "./format";
+import {
+  formatDate,
+  formatMinutes,
+  formatQuantity,
+  formatNumber,
+  formatTimesMade,
+  sourceName,
+} from "./format";
 
 describe("formatQuantity", () => {
   test.each([
@@ -40,4 +47,12 @@ test("formatDate writes the day, a short Portuguese month and the year", () => {
 test("sourceName is the host without www", () => {
   expect(sourceName("https://www.youtube.com/watch?v=x")).toBe("youtube.com");
   expect(sourceName("https://panelinha.com.br/receita/x")).toBe("panelinha.com.br");
+});
+
+test.each([
+  [0, "Nunca feita"],
+  [1, "1×"],
+  [12, "12×"],
+])("made %i times reads %s", (times, expected) => {
+  expect(formatTimesMade(times)).toBe(expected);
 });
