@@ -25,3 +25,5 @@ Done. Notes for later tickets:
 - Uses 05's `--text-display` and `--measure-wide` tokens and `.visually-hidden` class; no new tokens. Two columns from 48rem.
 - Letter groups have ids `letra-<L>` and are regions labelled by their letter.
 - e2e Recipes added: `pao-de-queijo` (rated, made twice), `pudim` (rated, made once, 4 h), `abobora-assada` (no Rating, never made). With 05's `bolo-de-cenoura` the index has 5 Recipes in groups A, B, C, P. Ticket 09 can reuse them; any new e2e Recipe changes the index screenshot and the "Receitas · 5" count in `tests/e2e/index.spec.ts`.
+
+Ticket 10 (owner decision, 2026-11-24) replaced the letter groups, the letter row and the A–Z link: the index is now one plain A–Z list. The letter index is in the backlog.

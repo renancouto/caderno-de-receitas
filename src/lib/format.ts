@@ -44,5 +44,5 @@ export function sourceName(source: string): string {
 }
 
 export function formatTimesMade(timesMade: number): string {
-  return timesMade === 0 ? "Nunca feita" : `${formatNumber(timesMade)}×`;
+  return timesMade === 0 ? "Nunca feita" : `Feita · ${formatNumber(timesMade)}`;
 }

@@ -14,7 +14,11 @@ export function CookLog({ log }: { log: Cook[] }) {
             <time class="label" dateTime={cook.date}>
               {formatDate(cook.date)}
             </time>
-            {cook.note && <p class="cook-note">{cook.note}</p>}
+            {cook.note && (
+              <p class="cook-note" data-pagefind-body>
+                {cook.note}
+              </p>
+            )}
           </li>
         ))}
       </ol>

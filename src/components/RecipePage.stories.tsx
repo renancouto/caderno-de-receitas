@@ -5,6 +5,8 @@ import type { ResponsivePhoto } from "../lib/responsive-photo";
 import { RecipePage } from "./RecipePage";
 
 const meta = {
+  title: "Pages/Receita",
+  id: "pages-recipe",
   component: RecipePage,
 } satisfies Meta<typeof RecipePage>;
 

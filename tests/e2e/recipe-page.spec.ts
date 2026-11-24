@@ -2,7 +2,7 @@ import { expect, test } from "@playwright/test";
 
 test("a full Recipe page shows every part of the Recipe", async ({ page }) => {
   await page.goto("recipes/bolo-de-cenoura");
-  await expect(page).toHaveTitle("Bolo de cenoura com cobertura · Caderno de receitas");
+  await expect(page).toHaveTitle("Bolo de cenoura com cobertura · Minhas receitas");
   await expect(page.getByRole("heading", { level: 1 })).toHaveText("Bolo de cenoura com cobertura");
   await expect(page.getByRole("list", { name: "Tags" }).getByRole("listitem")).toHaveText([
     "sobremesa",

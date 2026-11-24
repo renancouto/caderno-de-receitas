@@ -51,8 +51,8 @@ test("sourceName is the host without www", () => {
 
 test.each([
   [0, "Nunca feita"],
-  [1, "1×"],
-  [12, "12×"],
+  [1, "Feita · 1"],
+  [12, "Feita · 12"],
 ])("made %i times reads %s", (times, expected) => {
   expect(formatTimesMade(times)).toBe(expected);
 });

@@ -1,45 +1,20 @@
 import { describe, expect, test } from "vitest";
-import { allTags, catalogueView, letterGroups, parseView, viewSearch } from "./catalogue-view";
-
-const recipe = (title: string) => ({ slug: title.toLowerCase(), title });
-
-describe("letterGroups", () => {
-  test("groups Recipes by first letter in alphabetical order", () => {
-    const groups = letterGroups([recipe("Bolo"), recipe("Arroz"), recipe("Brigadeiro")]);
-    expect(groups).toEqual([
-      { letter: "A", recipes: [recipe("Arroz")] },
-      { letter: "B", recipes: [recipe("Bolo"), recipe("Brigadeiro")] },
-    ]);
-  });
-
-  test("accented titles group under their base letter and sort in Portuguese order", () => {
-    const groups = letterGroups([
-      recipe("Pudim"),
-      recipe("Ébano"),
-      recipe("Pão de queijo"),
-      recipe("Panqueca"),
-      recipe("Estrogonofe"),
-    ]);
-    expect(groups.map((group) => group.letter)).toEqual(["E", "P"]);
-    expect(groups[0]!.recipes.map((r) => r.title)).toEqual(["Ébano", "Estrogonofe"]);
-    expect(groups[1]!.recipes.map((r) => r.title)).toEqual(["Panqueca", "Pão de queijo", "Pudim"]);
-  });
-
-  test("lowercase titles group with uppercase ones", () => {
-    const groups = letterGroups([recipe("arroz doce"), recipe("Abóbora")]);
-    expect(groups).toEqual([{ letter: "A", recipes: [recipe("Abóbora"), recipe("arroz doce")] }]);
-  });
-
-  test("an empty Catalogue has no groups", () => {
-    expect(letterGroups([])).toEqual([]);
-  });
-});
+import {
+  allTags,
+  catalogueView,
+  parseQuery,
+  parseView,
+  queryParam,
+  viewSearch,
+  slugFromUrl,
+} from "./catalogue-view";
 
 type Item = {
   slug: string;
   title: string;
   tags?: string[];
   rating?: number;
+  totalMinutes?: number;
   timesMade: number;
   lastMade?: string;
 };
@@ -49,8 +24,7 @@ const item = (slug: string, rest: Partial<Item> = {}): Item => ({
   timesMade: 0,
   ...rest,
 });
-const flatTitles = (view: ReturnType<typeof catalogueView<Item>>) =>
-  view.kind === "flat" ? view.recipes.map((r) => r.title) : [];
+const flatTitles = (view: Item[]) => view.map((r) => r.title);
 
 describe("catalogueView", () => {
   const recipes = [
@@ -61,11 +35,14 @@ describe("catalogueView", () => {
     item("e", { rating: 1, timesMade: 7, lastMade: "2025-12-01" }),
   ];
 
-  test("alphabetical order keeps the letter groups", () => {
-    const view = catalogueView(recipes, { order: "alphabetical" });
-    expect(view.kind).toBe("grouped");
-    if (view.kind === "grouped")
-      expect(view.groups.map((g) => g.letter)).toEqual(["A", "B", "C", "D", "E"]);
+  test("alphabetical order is one list by title in Portuguese order", () => {
+    const accented = [item("Pudim"), item("Ébano"), item("Pão de queijo"), item("arroz doce")];
+    expect(flatTitles(catalogueView(accented, { order: "alphabetical" }))).toEqual([
+      "arroz doce",
+      "Ébano",
+      "Pão de queijo",
+      "Pudim",
+    ]);
   });
 
   test("rating puts the best first, ties by title, unrated last", () => {
@@ -98,14 +75,30 @@ describe("catalogueView", () => {
     ]);
   });
 
+  test("quickest puts the shortest total time first, ties by title, no time last", () => {
+    const timed = [
+      item("a", { totalMinutes: 60 }),
+      item("b", { totalMinutes: 15 }),
+      item("c"),
+      item("d", { totalMinutes: 15 }),
+      item("e", { totalMinutes: 0 }),
+    ];
+    expect(flatTitles(catalogueView(timed, { order: "quickest" }))).toEqual([
+      "e",
+      "b",
+      "d",
+      "a",
+      "c",
+    ]);
+  });
+
   test("a Tag filters the list and combines with the order", () => {
     expect(flatTitles(catalogueView(recipes, { order: "rating", tag: "doce" }))).toEqual([
       "a",
       "b",
     ]);
-    const grouped = catalogueView(recipes, { order: "alphabetical", tag: "salgado" });
-    expect(grouped.kind === "grouped" && grouped.groups).toEqual([
-      { letter: "D", recipes: [recipes[3]] },
+    expect(flatTitles(catalogueView(recipes, { order: "alphabetical", tag: "salgado" }))).toEqual([
+      "d",
     ]);
   });
 
@@ -152,5 +145,26 @@ describe("view parameters", () => {
     expect(viewSearch("?order=rating&tag=doce&q=x", { order: "alphabetical" })).toBe("?q=x");
     expect(viewSearch("?order=rating", { order: "rating" })).toBe("?order=rating");
     expect(viewSearch("?tag=x", { order: "alphabetical" })).toBe("");
+  });
+});
+
+describe("search parameters", () => {
+  test("reads the search text from the address", () => {
+    expect(parseQuery("?q=bolo+de+cenoura&order=rating")).toBe("bolo de cenoura");
+    expect(parseQuery("")).toBe("");
+  });
+
+  test("writes the search text and keeps order and Tag", () => {
+    expect(queryParam("?order=rating&tag=doce", "pão")).toBe("?order=rating&tag=doce&q=p%C3%A3o");
+    expect(queryParam("?q=bolo&order=rating", "")).toBe("?order=rating");
+  });
+
+  test("view changes keep the search text", () => {
+    expect(viewSearch("?q=bolo", { order: "rating" })).toBe("?q=bolo&order=rating");
+  });
+
+  test("a result address gives the Recipe slug", () => {
+    expect(slugFromUrl("/recipes/pao-de-queijo/")).toBe("pao-de-queijo");
+    expect(slugFromUrl("/caderno-de-receitas/recipes/pudim.html")).toBe("pudim");
   });
 });

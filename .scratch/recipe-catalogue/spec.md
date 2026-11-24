@@ -8,28 +8,28 @@ My recipes are scattered: some are my own, some I adapted from several places, a
 
 ## Solution
 
-A personal Catalogue of Recipes, named **Caderno de receitas**, published as a static website in Brazilian Portuguese, which I own entirely. Each Recipe is a file in a git repository with every quantity in a Standard Unit. A Recipe may be my own, with no Source, or adapted from one or more Sources, which are kept only as credit links and whose text is rewritten in my own words. I add Recipes and log Cooks by talking to my coding agent through two project skills (`@add-recipe` and `@log-cook`), which write the files; GitHub Actions tests the site and publishes it to GitHub Pages on every push.
+A personal Catalogue of Recipes, named **Minhas receitas** (the site address keeps `/caderno-de-receitas` for now), published as a static website in Brazilian Portuguese, which I own entirely. Each Recipe is a file in a git repository with every quantity in a Standard Unit. A Recipe may be my own, with no Source, or adapted from one or more Sources, which are kept only as credit links and whose text is rewritten in my own words. I add Recipes and log Cooks by talking to my coding agent through two project skills (`@add-recipe` and `@log-cook`), which write the files; GitHub Actions tests the site and publishes it to GitHub Pages on every push.
 
-The site has two pages: a cookbook-style A–Z index of the Catalogue with search, sorting and Tag filtering, and an editorial Recipe page designed for reading on a phone while cooking, where Ingredients and Steps can be ticked off.
+The site has two pages: a cookbook-style index of the Catalogue (A–Z by default) with search, sorting and Tag filtering, and an editorial Recipe page designed for reading on a phone while cooking, where Ingredients and Steps can be ticked off.
 
 ## User Stories
 
 ### Reading the Catalogue
 
-1. As the owner, I want an index of every Recipe in alphabetical order grouped by first letter, so that I can browse the Catalogue like the index of a cookbook.
-2. As the owner, I want a row of letters at the top of the index that jumps to each letter group, so that I can reach a Recipe quickly in a long list.
-3. As the owner, I want only letters that have Recipes to appear in that row, so that I never jump to an empty group.
-4. As the owner, I want each index entry to show the title, a dotted leader and the Rating on the right, so that the index reads like a printed cookbook.
+1. As the owner, I want an index of every Recipe in alphabetical order as one plain list, so that I can browse the Catalogue like the index of a cookbook.
+2. *(Deferred to the backlog: a row of letters that jumps to each letter group, once there are about 30 Recipes.)*
+3. *(Deferred with story 2.)*
+4. As the owner, I want each index entry to show the title with the Rating on the right as "4/5", rows separated by a thin line, so that the index reads like a quiet printed list.
 5. As the owner, I want each index entry to show the total time and how many times I've made it underneath, so that I can choose by effort and familiarity.
-6. As the owner, I want a Recipe with no Rating to show a dash instead of empty stars, so that "not rated" is distinct from a low Rating.
+6. As the owner, I want a Recipe with no Rating to show "–/5" in a muted colour, so that "not rated" is distinct from a low Rating.
 7. As the owner, I want a Recipe never made to say "Nunca feita", so that I can spot Recipes I haven't tried.
 8. As the owner, I want the number of Recipes shown under the index title, so that I can see the size of my Catalogue.
 9. As the owner, I want a quiet search field under the index title, so that I can find a Recipe by words in its title, Ingredients, Steps, Tags or Notes.
 10. As the owner, I want search results to update as I type, so that I don't have to submit anything.
 11. As the owner, I want a clear message when nothing matches my search, so that an empty list isn't confusing.
-12. As the owner, I want to sort the index by A–Z, Rating, times made, or longest since last made, so that I can answer questions like "what haven't I made in a while?".
-13. As the owner, I want the A–Z order to keep the letter groups and every other order to show one flat list, so that grouping only appears where it makes sense.
-14. As the owner, I want the value on the right of each entry to match the current order (stars for Rating, "5×" for times made, a date for last made), so that I can see why a Recipe is where it is.
+12. As the owner, I want to sort the index by Rating, times made, longest since last made or shortest total time (A–Z when no order is chosen), so that I can answer questions like "what haven't I made in a while?".
+13. As the owner, I want every order, A–Z included, to show one plain list with no letter headings, so that the index stays quiet.
+14. As the owner, I want an index entry to look the same in every order (Rating on the right, total time and times made underneath), so that the list stays calm and familiar.
 15. As the owner, I want Recipes without the value being sorted on (no Rating, never made) to go to the end of the list, so that they don't crowd out the ones that have it.
 16. As the owner, I want a row of Tag links to filter the index to one Tag, and a way to clear the filter, so that I can see all my "jantar" Recipes at once.
 17. As the owner, I want search, sort and Tag filter to work together, so that I can, for example, find vegetarian Recipes I haven't made in a while.
@@ -138,15 +138,15 @@ The site has two pages: a cookbook-style A–Z index of the Catalogue with searc
 ### Modules
 
 - **Recipe rules**: a pure module that takes the raw contents of a Recipe file and returns either the parsed Recipe or a list of problems, each with a human-readable message. It owns every rule: required fields, allowed units, quantities positive, Rating between 1 and 5, valid ISO dates, every Source is a URL, at least one Ingredient and one Step, file name is lowercase kebab-case. The Astro content collection uses it, so the build fails with the file name and every problem. `@add-recipe` and `@log-cook` also run it before finishing.
-- **Catalogue view**: a pure module that, given all Recipes plus a search result set, an order and a Tag, returns what the index shows: either letter groups (A–Z) or a flat list, with the value to show on the right of each entry. Sorting uses Portuguese collation for titles. Recipes missing the sorted value go last.
+- **Catalogue view**: a pure module that, given all Recipes plus a search result set, an order and a Tag, returns what the index shows: a single list (A–Z by default), with the value to show on the right of each entry. Sorting uses Portuguese collation for titles. Recipes missing the sorted value go last.
 - **Search**: Pagefind indexes the built Recipe pages at build time. The index controls ask Pagefind for matching Recipe addresses and pass them to the Catalogue view. Searching works offline once loaded and needs no server.
-- **UI components** (Preact): index page, index entry, letter row, index controls, Recipe header, facts strip, Ingredient list, Step list, tick-off list, Notes, Log timeline, Source credit (hidden when there are no Sources).
+- **UI components** (Preact): index page, index entry, index controls (one line: "Ordenar por", "Tags", "Limpar"), Recipe header, facts strip, Ingredient list, Step list, tick-off list, Notes, Log timeline, Source credit (hidden when there are no Sources).
 - **Project skills**: `@add-recipe` and `@log-cook` live in the project's agent skills folder. They are AI instructions plus any small scripts they need (for example, removing image metadata and running the recipe rules).
 
 ### Design
 
 - The design is fixed by the UI prototype on the `prototype/ui` branch and recorded in `.scratch/recipe-catalogue/design-verdict.md`: layout C on both pages, Fraunces (light) for headings, Newsreader for reading text, Libre Caslon Text for labels, quantities and dates, ivory background `#f9f4ea`, lines `#e6dccb`, ink `#1d1c1a`, muted `#6f6a62`, accent `#8a5a3b`.
-- The site name "Caderno de receitas" appears above the index title and in every page's browser title (e.g. "Carbonara picante · Caderno de receitas").
+- The site name "Minhas receitas" is the index page's `h1` (with "Índice · N" under it) and appears in every page's browser title (e.g. "Carbonara picante · Minhas receitas").
 - The prototype code itself is not reused; it is rewritten properly as components with tests.
 - Fonts are self-hosted rather than loaded from Google Fonts, so the site doesn't depend on a third party.
 
@@ -156,7 +156,7 @@ A good test checks behaviour the owner can see or rely on, through a module's pu
 
 There are three seams, from highest to lowest:
 
-1. **The built site** (Playwright end-to-end): build the site from a folder of test Recipes covering every case (Photo or none, groups, never made, no Rating, many Tags, long titles, accented titles), then test the real pages at phone and desktop widths: index grouping and letter jumps, search with Pagefind, every sort order, Tag filter, combinations, the page address keeping the view, navigating to a Recipe and back, Recipe addresses, ticking items. Separately, building with a folder containing an invalid Recipe must fail, and the error output must name the file and the problem.
+1. **The built site** (Playwright end-to-end): build the site from a folder of test Recipes covering every case (Photo or none, groups, never made, no Rating, many Tags, long titles, accented titles), then test the real pages at phone and desktop widths: the A–Z list, search with Pagefind, every sort order, Tag filter, combinations, the page address keeping the view, navigating to a Recipe and back, Recipe addresses, ticking items. Separately, building with a folder containing an invalid Recipe must fail, and the error output must name the file and the problem.
 2. **Components** (Storybook with the official Preact framework, run as tests by Storybook's Vitest addon in Vitest browser mode with Playwright's Chromium): a story for every visual state of every component, play functions for every interaction (ticking and unticking by tap and keyboard, searching, sorting, filtering, clearing), and the accessibility addon failing any story with a violation.
 3. **Recipe rules and Catalogue view** (Vitest unit tests): one case per rule and per sort or filter behaviour, including edge cases like a Rating of 0 or 6, a "tbsp" unit, an empty Ingredient Group, a malformed date, ties in sorting and accented titles.
 

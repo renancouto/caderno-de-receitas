@@ -9,7 +9,7 @@ export function StepList({ steps }: { steps: string[] }) {
       <h2 id="steps-heading" class="section-title">
         Preparo
       </h2>
-      <ol class="plain-list steps">
+      <ol class="plain-list steps" data-pagefind-body>
         {steps.map((step, index) => (
           <TickItem
             key={index}

@@ -41,9 +41,11 @@ export function RecipePage({ recipe, photo, ingredients, steps }: RecipePageProp
           <a class="recipe-back" href={url("/")}>
             ← Todas as receitas
           </a>
-          <h1 class="recipe-title">{recipe.title}</h1>
+          <h1 class="recipe-title" data-pagefind-body>
+            {recipe.title}
+          </h1>
           {recipe.tags && recipe.tags.length > 0 && (
-            <ul class="plain-list recipe-tags" aria-label="Tags">
+            <ul class="plain-list recipe-tags" aria-label="Tags" data-pagefind-body>
               {recipe.tags.map((tag) => (
                 <li key={tag} class="label recipe-tag">
                   {tag}

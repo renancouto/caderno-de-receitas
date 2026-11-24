@@ -9,7 +9,7 @@ export function RecipeNotes({ notes }: { notes: string }) {
         .map((paragraph) => paragraph.trim())
         .filter(Boolean)
         .map((paragraph) => (
-          <p key={paragraph} class="notes-text">
+          <p key={paragraph} class="notes-text" data-pagefind-body>
             {paragraph}
           </p>
         ))}
