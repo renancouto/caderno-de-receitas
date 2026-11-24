@@ -2,6 +2,7 @@
 title: Pão de queijo
 totalMinutes: 45
 rating: 5
+tags: [salgado]
 log:
   - date: 2026-03-01
   - date: 2026-05-10

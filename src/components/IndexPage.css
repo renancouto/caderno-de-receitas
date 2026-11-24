@@ -82,3 +82,13 @@
   line-height: 1;
   color: var(--color-accent);
 }
+
+.index-flat {
+  max-width: 32rem;
+}
+
+.index-empty {
+  font-family: var(--font-label);
+  font-size: var(--text-small);
+  color: var(--color-muted);
+}

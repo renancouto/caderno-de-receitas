@@ -13,10 +13,12 @@ const recipes = (await getCollection("recipes")).map((entry) => {
     rating: recipe.rating,
     totalMinutes: recipe.totalMinutes,
     timesMade: cookStats(recipe.log).timesMade,
+    lastMade: cookStats(recipe.log).lastMade,
+    tags: recipe.tags,
   };
 });
 ---
 
 <Page>
-  <IndexPage recipes={recipes} />
+  <IndexPage recipes={recipes} client:load />
 </Page>
