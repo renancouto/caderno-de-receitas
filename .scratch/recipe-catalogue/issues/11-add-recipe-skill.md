@@ -8,6 +8,7 @@
 
 - [ ] The skill lives in the project skills folder and is committed (the `.gitignore` exception already exists)
 - [ ] Accepts recipe text plus zero, one or several Source links, and optional Photos
+- [ ] Places Step photos under the right Step (`   ![](<slug>/passo-1.jpg)`, see 13's note) and removes their location metadata
 - [ ] Normalises every quantity into a Standard Unit, a plain count or "a gosto", and lists every conversion it had to guess
 - [ ] For Recipes from a Source: translates into Brazilian Portuguese and rewrites the Steps in its own words
 - [ ] For original Recipes: keeps the owner's wording and only Normalises

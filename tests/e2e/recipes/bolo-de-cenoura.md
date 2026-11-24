@@ -35,8 +35,10 @@ log:
 ## Preparo
 
 1. Bata a cenoura e os ovos no liquidificador.
+   ![](bolo-de-cenoura/passo-1.jpg)
 2. Misture a farinha e asse por 40 minutos.
 3. Ferva a cobertura e espalhe sobre o bolo.
+   ![](bolo-de-cenoura/passo-3.jpg)
 
 ## Notas
 

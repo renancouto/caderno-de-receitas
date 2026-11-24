@@ -86,3 +86,21 @@ button.tick {
 .step-ticked::before {
   color: var(--color-accent-faint);
 }
+
+.step-photo {
+  display: block;
+  width: 100%;
+  height: auto;
+  margin-bottom: var(--space-2);
+  border-radius: 2px;
+  background: var(--color-panel);
+}
+
+.step-text {
+  display: block;
+}
+
+.step-photo-ticked {
+  opacity: 0.45;
+  filter: grayscale(1);
+}

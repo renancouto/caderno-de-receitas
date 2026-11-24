@@ -12,19 +12,30 @@ export async function getStaticPaths() {
   return entries.map((entry) => ({
     params: { slug: entry.id },
     props: {
-      recipe: { ...entry.data, photos: undefined } as Recipe,
+      recipe: {
+        ...entry.data,
+        photos: undefined,
+        steps: entry.data.steps.map(({ text }) => ({ text })),
+      } as Recipe,
       headerImage: entry.data.photos?.[0],
+      stepImages: entry.data.steps.map((step) => step.photo),
     },
   }));
 }
 
-const { recipe, headerImage } = Astro.props;
+const { recipe, headerImage, stepImages } = Astro.props;
 const photo = headerImage ? await responsivePhoto(headerImage) : undefined;
+const steps = await Promise.all(
+  recipe.steps.map(async ({ text }, i) => {
+    const image = stepImages[i];
+    return image ? { text, photo: await responsivePhoto(image) } : { text };
+  }),
+);
 ---
 
 <Page title={recipe.title}>
   <RecipePage recipe={recipe} photo={photo}>
     <IngredientList slot="ingredients" groups={recipe.ingredients} client:load />
-    <StepList slot="steps" steps={recipe.steps} client:load />
+    <StepList slot="steps" steps={steps} client:load />
   </RecipePage>
 </Page>

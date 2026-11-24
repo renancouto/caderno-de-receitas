@@ -61,7 +61,9 @@ const frontMatterSchema = z.object({
 export type Ingredient = z.infer<typeof ingredientSchema>;
 export type IngredientGroup = z.infer<typeof groupSchema>;
 export type Cook = z.infer<typeof cookSchema>;
-export type Recipe = z.infer<typeof frontMatterSchema> & { steps: string[]; notes?: string };
+/** A Step's `photo` is a path relative to the recipes folder, like a Photo. */
+export type Step = { text: string; photo?: string };
+export type Recipe = z.infer<typeof frontMatterSchema> & { steps: Step[]; notes?: string };
 
 export type RecipeCheck = { ok: true; recipe: Recipe } | { ok: false; problems: string[] };
 
@@ -73,10 +75,19 @@ function splitFile(contents: string): { data: unknown; body: string } {
   return { data: parse(match[1] ?? ""), body: match[2] ?? "" };
 }
 
-function readSteps(body: string): string[] {
+// A Step image is a Markdown image on its own indented line under the Step: "   ![](passo-1.jpg)".
+function readSteps(body: string): Step[] {
   const section = /^##\s+Preparo\s*$([\s\S]*?)(?=^##\s|(?![\s\S]))/m.exec(body);
   if (!section) return [];
-  return [...(section[1] ?? "").matchAll(/^\s*\d+\.\s+(.+)$/gm)].map((m) => (m[1] ?? "").trim());
+  const steps: Step[] = [];
+  for (const line of (section[1] ?? "").split(/\r?\n/)) {
+    const step = /^\s*\d+\.\s+(.+)$/.exec(line);
+    const image = /^\s+!\[[^\]]*\]\(([^)\s]+)\)\s*$/.exec(line);
+    const current = steps.at(-1);
+    if (step) steps.push({ text: (step[1] ?? "").trim() });
+    else if (image && current) current.photo = image[1];
+  }
+  return steps;
 }
 
 function readNotes(body: string): string | undefined {
@@ -135,6 +146,7 @@ export function checkRecipe(
   const parsed = frontMatterSchema.safeParse(data ?? {});
   const steps = readSteps(body);
   const notes = readNotes(body);
+  const slug = fileName.replace(/\.md$/, "");
 
   const problems = [
     ...new Set([
@@ -143,7 +155,15 @@ export function checkRecipe(
         : [`The file name "${fileName}" must be lowercase kebab-case (like my-recipe.md).`]),
       ...(parsed.success ? [] : parsed.error.issues.map((issue) => describeIssue(issue, data))),
       ...(fileExists
-        ? photoProblems(listedPhotos(data), fileName.replace(/\.md$/, ""), fileExists)
+        ? [
+            ...photoProblems(listedPhotos(data), slug, fileExists),
+            ...photoProblems(
+              steps.flatMap((step) => (step.photo ? [step.photo] : [])),
+              slug,
+              fileExists,
+              "Step image",
+            ),
+          ]
         : []),
       ...(steps.length > 0
         ? []
