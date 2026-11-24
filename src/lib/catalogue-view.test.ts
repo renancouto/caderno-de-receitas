@@ -165,6 +165,6 @@ describe("search parameters", () => {
 
   test("a result address gives the Recipe slug", () => {
     expect(slugFromUrl("/recipes/pao-de-queijo/")).toBe("pao-de-queijo");
-    expect(slugFromUrl("/caderno-de-receitas/recipes/pudim.html")).toBe("pudim");
+    expect(slugFromUrl("/minhas-receitas/recipes/pudim.html")).toBe("pudim");
   });
 });

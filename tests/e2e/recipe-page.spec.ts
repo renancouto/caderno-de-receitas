@@ -38,7 +38,7 @@ test("a full Recipe page shows every part of the Recipe", async ({ page }) => {
   );
 
   await page.getByRole("link", { name: /Todas as receitas/ }).click();
-  await expect(page).toHaveURL(/\/caderno-de-receitas\/$/);
+  await expect(page).toHaveURL(/\/minhas-receitas\/$/);
 });
 
 test("a minimal Recipe page leaves out what the Recipe doesn't have", async ({ page }) => {

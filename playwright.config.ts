@@ -1,6 +1,6 @@
 import { defineConfig, devices } from "@playwright/test";
 
-const baseURL = "http://localhost:4322/caderno-de-receitas/";
+const baseURL = "http://localhost:4322/minhas-receitas/";
 
 // Screenshot tests only run inside the official Playwright image (see scripts/screenshots.sh),
 // so reference screenshots always come from Linux and match CI.

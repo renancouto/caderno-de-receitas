@@ -8,7 +8,7 @@ My recipes are scattered: some are my own, some I adapted from several places, a
 
 ## Solution
 
-A personal Catalogue of Recipes, named **Minhas receitas** (the site address keeps `/caderno-de-receitas` for now), published as a static website in Brazilian Portuguese, which I own entirely. Each Recipe is a file in a git repository with every quantity in a Standard Unit. A Recipe may be my own, with no Source, or adapted from one or more Sources, which are kept only as credit links and whose text is rewritten in my own words. I add Recipes and log Cooks by talking to my coding agent through two project skills (`@add-recipe` and `@log-cook`), which write the files; GitHub Actions tests the site and publishes it to GitHub Pages on every push.
+A personal Catalogue of Recipes, named **Minhas receitas** (at `renancouto.github.io/minhas-receitas`), published as a static website in Brazilian Portuguese, which I own entirely. Each Recipe is a file in a git repository with every quantity in a Standard Unit. A Recipe may be my own, with no Source, or adapted from one or more Sources, which are kept only as credit links and whose text is rewritten in my own words. I add Recipes and log Cooks by talking to my coding agent through two project skills (`@add-recipe` and `@log-cook`), which write the files; GitHub Actions tests the site and publishes it to GitHub Pages on every push.
 
 The site has two pages: a cookbook-style index of the Catalogue (A–Z by default) with search, sorting and Tag filtering, and an editorial Recipe page designed for reading on a phone while cooking, where Ingredients and Steps can be ticked off.
 

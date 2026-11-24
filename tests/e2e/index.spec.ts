@@ -98,7 +98,7 @@ test("a Tag filters the list, combines with the order and Limpar resets everythi
 
   await page.getByRole("searchbox", { name: "Buscar receitas" }).fill("pudim");
   await page.getByRole("link", { name: "Limpar" }).click();
-  await expect(page).toHaveURL(/\/caderno-de-receitas\/?$/);
+  await expect(page).toHaveURL(/\/minhas-receitas\/?$/);
   await expect(page.getByRole("searchbox", { name: "Buscar receitas" })).toHaveValue("");
   await expect(page.locator(".index-section")).toHaveText("Índice · 5");
 });
