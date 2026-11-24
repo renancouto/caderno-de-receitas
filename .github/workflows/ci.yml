@@ -24,6 +24,7 @@ jobs:
       - run: pnpm lint
       - run: pnpm typecheck
       - run: pnpm test:unit
+      - run: pnpm check:photos
 
   browser:
     name: Component and end-to-end tests
@@ -58,8 +59,8 @@ jobs:
           name: screenshot-diffs
           path: test-results/
 
-  # Later tickets add their jobs here (photo location check)
-  # and list them in `needs` of the deploy job.
+  # Later tickets add their jobs here and list them in `needs` of the deploy job.
+  # The photo location check (`pnpm check:photos`) runs as a step of the static job.
 
   build:
     name: Build site

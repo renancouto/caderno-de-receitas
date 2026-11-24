@@ -1,6 +1,7 @@
 ---
 title: Receita ruim
 rating: 6
+photos: [missing.jpg]
 ingredients:
   - items:
       - name: Colher

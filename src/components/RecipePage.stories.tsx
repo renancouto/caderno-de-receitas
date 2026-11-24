@@ -1,6 +1,7 @@
 import type { Meta, StoryObj } from "@storybook/preact-vite";
-import { expect, within } from "storybook/test";
+import { expect, waitFor, within } from "storybook/test";
 import type { Recipe } from "../lib/recipe-rules";
+import type { ResponsivePhoto } from "../lib/responsive-photo";
 import { RecipePage } from "./RecipePage";
 
 const meta = {
@@ -61,6 +62,13 @@ const complete: Recipe = {
     { date: "2026-11-01" },
     { date: "2026-03-02", note: "Cobertura ficou rala; ferver mais." },
   ],
+};
+
+const photo: ResponsivePhoto = {
+  src: new URL("./fixtures/header.jpg", import.meta.url).href,
+  width: 1600,
+  height: 900,
+  sources: [],
 };
 
 const region = (canvasElement: HTMLElement, name: string) =>
@@ -173,5 +181,38 @@ export const LongTitle: Story = {
       title: "Arroz de forno cremoso com frango desfiado, milho, requeijão e queijo gratinado",
       tags: ["jantar", "forno", "família", "congelável", "marmita"],
     },
+  },
+};
+
+const headerImage = (canvasElement: HTMLElement) =>
+  canvasElement.querySelector<HTMLImageElement>(".recipe-photo");
+
+export const WithPhoto: Story = {
+  args: { recipe: complete, photo },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    await expect(canvas.getByRole("heading", { level: 1 })).toHaveTextContent(complete.title);
+    await expect(canvas.getByRole("list", { name: "Tags" })).toBeVisible();
+    const image = headerImage(canvasElement)!;
+    await expect(image.alt).toBe("");
+    await waitFor(() => expect(image.naturalWidth).toBeGreaterThan(0));
+  },
+};
+
+export const WithoutPhoto: Story = {
+  args: { recipe: complete },
+  play: async ({ canvasElement }) => {
+    await expect(headerImage(canvasElement)).toBeNull();
+    await expect(within(canvasElement).getByRole("heading", { level: 1 })).toBeVisible();
+  },
+};
+
+export const LongTitleWithPhoto: Story = {
+  args: { ...LongTitle.args, photo },
+  play: async ({ canvasElement }) => {
+    const title = within(canvasElement).getByRole("heading", { level: 1 });
+    const header = canvasElement.querySelector(".recipe-header")!.getBoundingClientRect();
+    await expect(title.getBoundingClientRect().top).toBeGreaterThanOrEqual(header.top);
+    await expect(title.getBoundingClientRect().bottom).toBeLessThanOrEqual(header.bottom);
   },
 };

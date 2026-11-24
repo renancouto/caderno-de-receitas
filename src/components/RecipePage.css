@@ -1,11 +1,55 @@
 .recipe-header {
+  --header-ink: var(--color-ink);
+  --header-link: var(--color-accent);
+  position: relative;
   display: flex;
   align-items: flex-end;
   min-height: 18rem;
   background: var(--color-panel);
+  color: var(--header-ink);
+}
+
+.has-photo {
+  --header-ink: var(--color-on-photo);
+  --header-link: var(--color-on-photo);
+  min-height: 26rem;
+  overflow: hidden;
+  background: var(--color-photo-fallback);
+}
+
+/* Darkens the top (back link) and bottom (title, Tags) so the text stays readable on any Photo. */
+.has-photo::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to bottom,
+    rgb(var(--color-photo-shade) / 0.5) 0,
+    rgb(var(--color-photo-shade) / 0) 30%,
+    rgb(var(--color-photo-shade) / 0.2) 45%,
+    rgb(var(--color-photo-shade) / 0.85) 100%
+  );
+}
+
+.recipe-photo {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.recipe-back {
+  font-family: var(--font-label);
+  font-size: var(--text-small);
+  color: var(--header-link);
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.2em;
 }
 
 .recipe-wide {
+  position: relative;
+  z-index: 1;
   width: 100%;
   max-width: var(--measure-wide);
   margin: 0 auto;
@@ -30,7 +74,7 @@
 
 .recipe-tag {
   font-style: italic;
-  color: var(--color-ink);
+  color: var(--header-ink);
 }
 
 .facts {
