@@ -4,7 +4,7 @@
 
 **Blocked by:** 07 (Photos)
 
-**Status:** ready-for-agent
+**Status:** done
 
 Owner decisions (2026-11-23):
 
@@ -16,12 +16,32 @@ Owner decisions (2026-11-23):
 
 The throwaway prototype (local branch `prototype-13`, not merged) was approved with option A.
 
-- [ ] The recipe rules read an optional image per Step and reject a Step photo whose file doesn't exist
-- [ ] Steps without a photo look exactly as they do now
-- [ ] Each Step photo is resized and served in modern formats with responsive sizes by Astro's image processing, with the Step text as context for its alternative text
-- [ ] The photo is above the Step text at every width, as in the approved prototype
-- [ ] The location metadata check from 07 covers Step photos
+- [x] The recipe rules read an optional image per Step and reject a Step photo whose file doesn't exist
+- [x] Steps without a photo look exactly as they do now
+- [x] Each Step photo is resized and served in modern formats with responsive sizes by Astro's image processing, with the Step text as context for its alternative text
+- [x] The photo is above the Step text at every width, as in the approved prototype
+- [x] The location metadata check from 07 covers Step photos
 - [ ] `@add-recipe` places Step photos under the right Step and removes their location metadata
-- [ ] Unit tests for reading Step photos (none, some, all, missing file)
-- [ ] One story per state (no Step photos, some, all, ticked), widths via the viewport toolbar; a11y addon passes; screenshot tests for the main states at phone and wide widths
-- [ ] End-to-end test: a Recipe with some Step photos shows each image with its Step
+- [x] Unit tests for reading Step photos (none, some, all, missing file)
+- [x] One story per state (no Step photos, some, all, ticked), widths via the viewport toolbar; a11y addon passes; screenshot tests for the main states at phone and wide widths
+- [x] End-to-end test: a Recipe with some Step photos shows each image with its Step
+
+## Comments
+
+Done, except the `@add-recipe` box: that skill is ticket 11, which now lists Step photos (see below).
+
+- How a Step image is written (for 11): a Markdown image on its own line, indented under its Step in the "Preparo" list, path relative to the recipes folder like `photos:` (so `name.jpg` or `<recipe-slug>/name.jpg`):
+
+  ```markdown
+  1. Bata a cenoura e os ovos no liquidificador.
+     ![](bolo-de-cenoura/passo-1.jpg)
+  ```
+
+  The alt text in the brackets is ignored; leave it empty. Only the first image line under a Step counts (a later one replaces it). Run `pnpm strip:location` on each Step image, like Photos.
+- `Recipe.steps` is now `Step[]` (`{ text, photo? }`) instead of `string[]`. Any code reading Steps (search in 10, the skills) must use `step.text`.
+- The recipe rules check Step images with `photoProblems(..., "Step image")` (same folder, extension and existence rules as Photos). `pnpm check:photos` already covers them, as it scans every committed image.
+- The collection schema resolves `steps[].photo` with `image()`; the page builds each one with `responsivePhoto()`. `StepList` takes `StepView[]` (`{ text, photo?: ResponsivePhoto }`).
+- Alternative text is empty: the image sits inside the Step's button, and the Step text right below it describes it, so the button's name stays the Step text.
+- The image sits above the text at every width (option A). A ticked Step's image is greyed and faded (`.step-photo-ticked`).
+- Stories: `StepList` `Default` (no photos), `SomePhotos`, `AllPhotos`, `Ticked` (now with photos). Screenshots of the photo stories and the full Recipe page at phone and 1280 px (`-wide`).
+- Test Recipe `bolo-de-cenoura` now has images on Steps 1 and 3; the header-image e2e test's `picture source` selector was scoped to the header.

@@ -45,7 +45,7 @@ describe("checkRecipe", () => {
             ],
           },
         ],
-        steps: ["Cozinhe a massa.", "Misture com os ovos."],
+        steps: [{ text: "Cozinhe a massa." }, { text: "Misture com os ovos." }],
       },
     });
   });
@@ -90,7 +90,7 @@ Fica melhor no dia seguinte.
         photos: ["a.jpg"],
         ingredients: [{ name: "Base", items: [{ name: "Farinha", quantity: 1, unit: "cup" }] }],
         log: [{ date: "2026-02-28", note: "boa" }],
-        steps: ["Asse."],
+        steps: [{ text: "Asse." }],
         notes: "Fica melhor no dia seguinte.",
       },
     });
@@ -253,6 +253,54 @@ Fica melhor no dia seguinte.
         ok: false,
         problems: ['Photo "carbonara-picante/capa.jpg" does not exist.'],
       });
+    });
+  });
+
+  describe("Step images", () => {
+    const withImages = (...images: (string | undefined)[]) =>
+      valid.replace(
+        /1\. [\s\S]*/,
+        ["Cozinhe a massa.", "Misture com os ovos."]
+          .map((text, i) => `${i + 1}. ${text}\n${images[i] ? `   ![](${images[i]})\n` : ""}`)
+          .join(""),
+      );
+    const all = () => true;
+    const stepsOf = (contents: string, fileExists: (path: string) => boolean = all) => {
+      const result = checkRecipe(contents, validFileName, { fileExists });
+      return result.ok ? result.recipe.steps : result.problems;
+    };
+
+    it("reads Steps without images as text only", () => {
+      expect(stepsOf(withImages())).toEqual([
+        { text: "Cozinhe a massa." },
+        { text: "Misture com os ovos." },
+      ]);
+    });
+
+    it("attaches an image to its Step when some Steps have one", () => {
+      expect(stepsOf(withImages(undefined, "carbonara-picante/passo-2.jpg"))).toEqual([
+        { text: "Cozinhe a massa." },
+        { text: "Misture com os ovos.", photo: "carbonara-picante/passo-2.jpg" },
+      ]);
+    });
+
+    it("reads an image for every Step", () => {
+      expect(stepsOf(withImages("passo-1.jpg", "passo-2.png"))).toEqual([
+        { text: "Cozinhe a massa.", photo: "passo-1.jpg" },
+        { text: "Misture com os ovos.", photo: "passo-2.png" },
+      ]);
+    });
+
+    it("names a Step image that doesn't exist", () => {
+      expect(stepsOf(withImages("passo-1.jpg"), () => false)).toEqual([
+        'Step image "passo-1.jpg" does not exist.',
+      ]);
+    });
+
+    it("rejects a Step image outside the Recipe's folder", () => {
+      expect(stepsOf(withImages("outra/passo-1.jpg"))).toEqual([
+        'Step image "outra/passo-1.jpg" must be next to the Recipe: in the recipes folder or in the folder "carbonara-picante".',
+      ]);
     });
   });
 });

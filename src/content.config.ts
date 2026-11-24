@@ -40,7 +40,11 @@ function recipeLoader(): Loader {
 export const collections = {
   recipes: defineCollection({
     loader: recipeLoader(),
-    // Only resolves Photo paths into Astro images; the Recipe rules have already validated the data.
-    schema: ({ image }) => z.looseObject({ photos: z.array(image()).optional() }),
+    // Only resolves Photo and Step image paths into Astro images; the Recipe rules have already validated the data.
+    schema: ({ image }) =>
+      z.looseObject({
+        photos: z.array(image()).optional(),
+        steps: z.array(z.looseObject({ text: z.string(), photo: image().optional() })),
+      }),
   }),
 };

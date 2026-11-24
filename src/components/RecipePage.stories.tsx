@@ -24,7 +24,7 @@ const minimal: Recipe = {
       ],
     },
   ],
-  steps: ["Cozinhe a massa.", "Misture com os ovos."],
+  steps: [{ text: "Cozinhe a massa." }, { text: "Misture com os ovos." }],
 };
 
 const complete: Recipe = {
@@ -54,9 +54,9 @@ const complete: Recipe = {
     },
   ],
   steps: [
-    "Bata a cenoura, o óleo e os ovos no liquidificador.",
-    "Misture a farinha e asse por 40 minutos.",
-    "Ferva a cobertura e espalhe sobre o bolo ainda quente.",
+    { text: "Bata a cenoura, o óleo e os ovos no liquidificador." },
+    { text: "Misture a farinha e asse por 40 minutos." },
+    { text: "Ferva a cobertura e espalhe sobre o bolo ainda quente." },
   ],
   notes: "Uso menos açúcar que a receita original.\n\nFica melhor no dia seguinte.",
   log: [

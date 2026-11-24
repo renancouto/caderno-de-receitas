@@ -111,7 +111,7 @@ test("the first Photo is the header image, served resized in modern formats", as
     .toBeGreaterThan(0);
 
   const sources = await page
-    .locator("picture source")
+    .locator(".recipe-header picture source")
     .evaluateAll((els) =>
       els.map((el) => ({ type: el.getAttribute("type"), srcset: el.getAttribute("srcset") })),
     );
@@ -126,4 +126,26 @@ test("a Recipe without a Photo has a plain header", async ({ page }) => {
   await page.goto("recipes/carbonara-picante");
   await expect(page.locator(".recipe-photo")).toHaveCount(0);
   await expect(page.getByRole("heading", { level: 1 })).toBeVisible();
+});
+
+test("a Recipe with some Step photos shows each image with its Step", async ({ page }) => {
+  await page.goto("recipes/bolo-de-cenoura");
+  const steps = page.getByRole("region", { name: "Preparo" }).getByRole("listitem");
+  await expect(steps).toHaveText([
+    "Bata a cenoura e os ovos no liquidificador.",
+    "Misture a farinha e asse por 40 minutos.",
+    "Ferva a cobertura e espalhe sobre o bolo.",
+  ]);
+  for (const [index, count] of [1, 0, 1].entries()) {
+    await expect(steps.nth(index).locator("img")).toHaveCount(count);
+  }
+  for (const index of [0, 2]) {
+    const image = steps.nth(index).locator("img");
+    await image.scrollIntoViewIfNeeded();
+    await expect(image).toHaveAttribute("alt", "");
+    await expect(steps.nth(index).locator("source[type='image/avif']")).toHaveCount(1);
+    await expect
+      .poll(() => image.evaluate((img: HTMLImageElement) => img.naturalWidth))
+      .toBeGreaterThan(0);
+  }
 });

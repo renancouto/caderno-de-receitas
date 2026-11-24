@@ -60,7 +60,7 @@ export function RecipePage({ recipe, photo, ingredients, steps }: RecipePageProp
         <div class="recipe-columns">
           {ingredients ?? <IngredientList groups={recipe.ingredients} />}
           <div>
-            {steps ?? <StepList steps={recipe.steps} />}
+            {steps ?? <StepList steps={recipe.steps.map(({ text }) => ({ text }))} />}
             {recipe.notes && <RecipeNotes notes={recipe.notes} />}
           </div>
         </div>
