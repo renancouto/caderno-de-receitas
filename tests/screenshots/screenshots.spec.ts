@@ -45,21 +45,22 @@ const ticks: Record<string, number> = {
 };
 
 for (const id of [
-  "components-indexpage--one-recipe",
-  "components-indexpage--catalogue",
-  "components-indexpage--sorted-by-rating",
-  "components-indexpage--filtered-by-tag",
+  "pages-index--default",
+  "pages-index--sorted",
+  "pages-index--filtered-by-tag",
+  "pages-index--searching",
+  "pages-index--no-results",
   "components-indexentry--rated",
   "components-indexentry--not-rated",
   "components-indexentry--never-made-without-time",
   "components-indexentry--long-title",
-  "components-recipepage--complete",
-  "components-recipepage--minimal",
-  "components-recipepage--long-title",
+  "pages-recipe--complete",
+  "pages-recipe--minimal",
+  "pages-recipe--long-title",
   "components-ingredientlist--ticked",
   "components-steplist--ticked",
-  "components-recipepage--with-photo",
-  "components-recipepage--long-title-with-photo",
+  "pages-recipe--with-photo",
+  "pages-recipe--long-title-with-photo",
 ]) {
   test(`story ${id}`, async ({ page }) => {
     await page.goto(`${storybook}/iframe.html?id=${id}&viewMode=story`);

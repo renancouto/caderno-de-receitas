@@ -34,8 +34,8 @@ export const Rated: Story = {
       "href",
       "/recipes/carbonara-picante",
     );
-    await expect(canvas.getByRole("link", { name: /Nota 4 de 5/ })).toHaveTextContent("★★★★☆");
-    await expect(canvas.getByText("30 min · 3×")).toBeVisible();
+    await expect(canvas.getByRole("link", { name: /Nota 4 de 5/ })).toHaveTextContent("4/5");
+    await expect(canvas.getByText("30 min · Feita · 3")).toBeVisible();
   },
 };
 
@@ -43,8 +43,8 @@ export const NotRated: Story = {
   args: { recipe: { slug: "pao", title: "Pão de queijo", totalMinutes: 90, timesMade: 1 } },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
-    await expect(canvas.getByRole("link", { name: /Sem nota/ })).toHaveTextContent("—");
-    await expect(canvas.getByText("1 h 30 min · 1×")).toBeVisible();
+    await expect(canvas.getByRole("link", { name: /Sem nota/ })).toHaveTextContent("–/5");
+    await expect(canvas.getByText("1 h 30 min · Feita · 1")).toBeVisible();
   },
 };
 

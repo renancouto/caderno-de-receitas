@@ -12,7 +12,7 @@ export function IngredientList({ groups }: { groups: IngredientGroup[] }) {
         Ingredientes
       </h2>
       {groups.map((group, index) => (
-        <div key={group.name ?? index} class="ingredient-group">
+        <div key={group.name ?? index} class="ingredient-group" data-pagefind-body>
           {group.name && <h3 class="ingredient-group-title">{group.name}</h3>}
           <ul class="plain-list">
             {group.items.map((ingredient) => (
