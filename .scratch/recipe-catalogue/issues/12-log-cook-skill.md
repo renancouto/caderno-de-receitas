@@ -4,7 +4,7 @@
 
 **Blocked by:** 03 (Complete recipe rules)
 
-**Status:** ready-for-agent
+**Status:** done
 
 - [x] The skill lives in the project skills folder and is committed (the `.gitignore` exception already exists)
 - [x] Finds the Recipe from the sentence; asks the owner to choose when more than one matches, and never guesses
