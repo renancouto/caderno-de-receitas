@@ -27,9 +27,9 @@ ingredients:
       - name: Sal
         toTaste: true
 log:
+  - date: 2026-11-01
   - date: 2025-12-24
     note: Fiz para o Natal.
-  - date: 2026-11-01
 ---
 
 ## Preparo
