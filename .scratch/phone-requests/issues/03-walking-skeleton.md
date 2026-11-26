@@ -4,7 +4,7 @@
 
 **Blocked by:** 01 (Confirm the facts), 02 (One rules document)
 
-**Status:** ready-for-agent
+**Status:** wontfix
 
 - [x] Owner-only steps, listed clearly: create a Gemini API key in Google AI Studio and save it as a repository secret; read the chosen model's free limits in AI Studio (they aren't in the docs) and note them here; create a private GitHub App installed only on this repository (Contents and Pull requests write) and save its ID and private key as repository secrets
 - [x] Workflow on `issues` opened; runs only when the issue's author and the actor are the owner's numeric user ID; minimal permissions; no `pull_request_target`
@@ -25,3 +25,7 @@
 - Rule problems in the failure comment are `checkRecipe`'s English messages under a Portuguese heading.
 - Real try: not done yet (the `issues` trigger only runs from the default branch).
 - First real try (issue #24, 2026-11-26): the Interactions API (`/v1beta/interactions`) answered `403 PERMISSION_DENIED` for this free key, while `models` and `generateContent` accepted it (`generateContent` then gave `503 UNAVAILABLE`, the model being busy). Switched to `generateContent` with `responseJsonSchema`, retry a busy model (503) three times over about a minute, and report a refused key (401/403) as such instead of "o modelo não respondeu".
+
+## Comments
+
+Dropped on 2026-11-26: the owner changes the Catalogue only from the desktop. See the Outcome in `docs/adr/0003-phone-changes-through-requests.md`.

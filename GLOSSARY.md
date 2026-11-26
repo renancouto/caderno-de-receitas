@@ -64,10 +64,6 @@ _Avoid_: Attempt, session, entry
 The list of a Recipe's Cooks. How many times a Recipe was made is the number of Cooks in its Log.
 _Avoid_: History, counter, journal
 
-**Request**:
-A message the owner sends from the phone asking for one change to one Recipe: adding it, editing it, logging a Cook or changing its Rating. A Request is published only when the change it produces is merged.
-_Avoid_: Draft, ticket, submission
-
 **Backlog**:
 Ideas for future features, written up so they're ready to explore, but not part of the first version.
 _Avoid_: Roadmap, wishlist

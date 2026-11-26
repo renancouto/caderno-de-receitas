@@ -1,4 +1,4 @@
-Status: ready-for-agent
+Status: wontfix
 
 # Spec: Requests from the phone
 
@@ -91,3 +91,7 @@ The work is split into tickets in [`issues/`](issues/), each with its own checkl
 - [ ] 05 · Changing existing Recipes: edits, Cooks and Ratings
 - [ ] 06 · Running a Request again
 - [ ] 07 · Auto-merge switch and "publicar direto"
+
+## Comments
+
+Dropped on 2026-11-26: the owner changes the Catalogue only from the desktop. See the Outcome in `docs/adr/0003-phone-changes-through-requests.md`.

@@ -1,6 +1,6 @@
 # Recipe rules
 
-How to write a change to the owner's recipe **Catalogue**. You have this document, the owner's **Request** (a message in Portuguese asking for one change to one Recipe), today's date, and, when the Request changes an existing Recipe, that Recipe's current file. Every rule here works from those alone.
+How to write a change to the owner's recipe **Catalogue**, shared by the `add-recipe` and `log-cook` skills. Each skill works from the owner's message (in Portuguese, asking for one change to one Recipe), today's date and, for an existing Recipe, its current file.
 
 Everything written into a Recipe is in Brazilian Portuguese.
 
@@ -19,7 +19,7 @@ Everything written into a Recipe is in Brazilian Portuguese.
 
 ## Wording: original or from Sources
 
-- **Original** (the Request has no Source link): keep the owner's wording in the title, Ingredient names, Steps and Notes. Change only quantities (see Normalising), Step numbering and obvious typos.
+- **Original** (the message has no Source link): keep the owner's wording in the title, Ingredient names, Steps and Notes. Change only quantities (see Normalising), Step numbering and obvious typos.
 - **From Sources** (one or several links): translate into Brazilian Portuguese and rewrite every Step in your own words, as a short instruction that carries the same actions, times and temperatures. Merge several Sources into one Recipe, following the owner's text where the Sources disagree. Each Source goes in `sources:` as its URL, a credit only; copy no text and no image from a Source.
 
 ## Normalising
@@ -99,15 +99,15 @@ Fica melhor no dia seguinte.
 
 ## Cooks and Ratings
 
-When the Request says the owner made a Recipe ("fiz a carbonara hoje, precisava de mais pimenta"):
+When the message says the owner made a Recipe ("fiz a carbonara hoje, precisava de mais pimenta"):
 
-- **Date**: today's date unless the Request gives another ("ontem", "sábado", "dia 3"); resolve it against today's date to `YYYY-MM-DD`. When the day can't be resolved to one date (a bare weekday that could be two dates), ask.
+- **Date**: today's date unless the message gives another ("ontem", "sábado", "dia 3"); resolve it against today's date to `YYYY-MM-DD`. When the day can't be resolved to one date (a bare weekday that could be two dates), ask.
 - **Note**: the owner's remark about that occasion, in Brazilian Portuguese and in the owner's own words, trimmed to what they said ("Precisava de mais pimenta."). Omit `note` when they said nothing about the occasion.
-- **Rating**: a whole number from 1 to 5, only when the Request gives one ("nota 5", "4 estrelas"). A vague opinion ("ficou ótima") is a note, and the Rating stays as it is.
+- **Rating**: a whole number from 1 to 5, only when the message gives one ("nota 5", "4 estrelas"). A vague opinion ("ficou ótima") is a note, and the Rating stays as it is.
 
 Edit only these front-matter lines:
 
 - Add the Cook to `log`, creating `log` when absent. Keep the Log **newest first**: insert the Cook where its date belongs, so a past date lands below newer Cooks; a Cook with the same date as an existing one goes above it.
 - Write the Cook as `- date: 2026-11-23` with `note: ...` beneath it when present, matching the file's existing indentation and quoting. Quote the note when it contains `:` or `#`.
-- Set `rating` when the Request gives one, replacing any existing value.
+- Set `rating` when the message gives one, replacing any existing value.
 - Every other line of the file (body, other fields, existing Cooks) stays byte for byte as it was.
