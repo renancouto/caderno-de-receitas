@@ -9,6 +9,6 @@
 - [ ] The setting lives in one place the owner can change from the phone (for example a repository variable), with every kind off by default; documented in the spec
 - [ ] Deciding whether to auto-merge is a small tested function: setting, kind of change, and "publicar direto"
 - [ ] Auto-merge uses GitHub's auto-merge (squash) so it waits for the required checks
-- [ ] After an auto-merge, the deploy runs (same method as ticket 03 for starting workflows)
+- [ ] After an auto-merge, the deploy runs (the merge to `main` happens through GitHub's auto-merge enabled with the GitHub App token, so the push to `main` starts CI and deploy; if it doesn't, start the deploy with `gh workflow run`, which is fine here because deploy isn't a required check)
 - [ ] The pull request comment says whether it will merge automatically
 - [ ] Tried for real with "publicar direto" on a small change

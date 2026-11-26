@@ -43,7 +43,7 @@ I send a **Request** from the GitHub app: a plain issue saying in Portuguese wha
 ### Safety and privacy
 
 20. As the owner, I want only my Requests to start the workflow, so that nobody else can spend the model's free quota or change the Catalogue.
-21. As the owner, I want photos never committed with location data, so that my home isn't published.
+21. As the owner, I want photos never committed with location data, and a reminder to turn location off before attaching (attachments are public with their location), so that my home isn't published.
 22. As the owner, I want a Request's text treated as untrusted, so that a Request can't make the workflow do anything except produce a Recipe change.
 
 ### One set of rules
@@ -53,11 +53,11 @@ I send a **Request** from the GitHub app: a plain issue saying in Portuguese wha
 ## Implementation Decisions
 
 - **Trigger:** `issues` (opened) and `issue_comment` (created) events. The workflow runs only when the issue's author and the event's actor are the owner, compared by numeric user ID. Never `pull_request_target`; permissions are the minimum each job needs.
-- **Model:** Gemini through Google AI Studio's free tier, with its API key as a repository secret. The model only returns a Recipe file (or the changed one) and a list of guessed conversions; it can't run commands or touch other files. Its instructions are built from the shared rules file used by both skills.
+- **Model:** Gemini through Google AI Studio's free tier, with its API key as a repository secret. The model only returns a Recipe file (or the changed one) and a list of guessed conversions; it can't run commands or touch other files. Its instructions are built from the shared rules file used by both skills. The free tier's exact limits aren't published in the docs; they are visible only in AI Studio (per project, reset at midnight Pacific time), and going over them is reported like the model being unavailable. The free tier may use prompts to improve Google's products, so only the Request's text and the rules are sent.
 - **Shared rules:** the Normalising, translation, file-format and naming rules move out of the two skills into one rules document that the skills point to and the workflow sends to the model.
 - **Pull request:** a branch per Request (`request/<issue number>`), one commit with the Recipe and stripped photos, `Closes #<n>` in the body, and a Portuguese comment with the guessed conversions. "refazer" force-pushes the same branch.
-- **CI on the workflow's commits:** commits pushed with the Action's own token don't start workflows, so the workflow starts CI with `gh workflow run` on the branch (CI gains a `workflow_dispatch` trigger with unchanged job names). After an auto-merge it starts the deploy the same way. If checks started this way don't count for the pull request, switch to a GitHub App token.
-- **Photos:** downloaded from the Request's attachments, location data removed with the existing stripping code, placed next to the Recipe like `@add-recipe` does. Raw images are never committed.
+- **CI on the workflow's pull requests:** the workflow pushes the branch and opens the pull request with a GitHub App installation token (`actions/create-github-app-token`; a private app installed only on this repository, with Contents and Pull requests write), so the normal `pull_request` CI runs and counts as the required checks. Neither the Action's own token nor `gh workflow run` works: pushes with `GITHUB_TOKEN` start no workflows, pull requests it opens wait for a manual "Approve workflows to run", and checks from a `workflow_dispatch` run don't count for a pull request (tested in [`research.md`](research.md)).
+- **Photos:** downloaded from the Request's attachments, location data removed with the existing stripping code, placed next to the Recipe like `@add-recipe` does. Raw images are never committed. GitHub keeps location data in attachments, and attachments on a public repository are public as soon as they're uploaded, so stripping in the workflow keeps location out of git but not out of the Request: the owner turns off location on the phone before attaching, the workflow's first comment on a Request with images reminds them, and it warns when an attachment still has location data. Photos are never sent to the model.
 - **Ambiguity:** when a Request matches several Recipes or none, the workflow comments a numbered list and stops; the owner's next comment continues the Request.
 - **Auto-merge:** a repository setting read by the workflow, listing which kinds of change merge automatically (empty at first). "publicar direto" in a Request overrides it for that Request. Merging uses GitHub's auto-merge once the required checks pass.
 - **Repository:** stays public on GitHub Pages (ADR 0003).
@@ -84,7 +84,7 @@ I send a **Request** from the GitHub app: a plain issue saying in Portuguese wha
 
 The work is split into tickets in [`issues/`](issues/), each with its own checklist; the order is in [`tickets.md`](tickets.md).
 
-- [ ] 01 · Confirm the facts the design depends on
+- [x] 01 · Confirm the facts the design depends on
 - [x] 02 · One rules document for the skills and the workflow
 - [ ] 03 · Walking skeleton: a new Recipe from a Request
 - [ ] 04 · Photos from a Request
