@@ -85,7 +85,7 @@ I send a **Request** from the GitHub app: a plain issue saying in Portuguese wha
 The work is split into tickets in [`issues/`](issues/), each with its own checklist; the order is in [`tickets.md`](tickets.md).
 
 - [ ] 01 · Confirm the facts the design depends on
-- [ ] 02 · One rules document for the skills and the workflow
+- [x] 02 · One rules document for the skills and the workflow
 - [ ] 03 · Walking skeleton: a new Recipe from a Request
 - [ ] 04 · Photos from a Request
 - [ ] 05 · Changing existing Recipes: edits, Cooks and Ratings
