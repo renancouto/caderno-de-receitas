@@ -14,7 +14,7 @@ export function pullRequestBody(issueNumber: number): string {
 }
 
 export type Failure =
-  | { kind: "quota" | "unavailable"; detail: string }
+  | { kind: "quota" | "denied" | "unavailable"; detail: string }
   | { kind: "rules"; problems: string[] }
   | { kind: "empty" };
 
@@ -27,9 +27,16 @@ export function failureComment(failure: Failure): string {
         "",
         `Detalhe: \`${failure.detail}\``,
       ].join("\n");
+    case "denied":
+      return [
+        "Não consegui criar a receita: a chave do modelo foi recusada (confira o segredo GEMINI_API_KEY).",
+        "Nenhum pull request foi aberto.",
+        "",
+        `Detalhe: \`${failure.detail}\``,
+      ].join("\n");
     case "unavailable":
       return [
-        "Não consegui criar a receita: o modelo não respondeu.",
+        "Não consegui criar a receita: o modelo não respondeu, mesmo depois de tentar de novo por cerca de um minuto.",
         "Nenhum pull request foi aberto. Tente de novo mais tarde.",
         "",
         `Detalhe: \`${failure.detail}\``,
