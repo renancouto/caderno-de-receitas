@@ -11,4 +11,5 @@ The owner changes the Catalogue from the phone by opening a Request (a GitHub is
 ## Consequences
 
 - Only the owner can start the workflow (checked by numeric user ID), and a Request's text is untrusted input: the model only writes a Recipe file, which must pass the recipe rules and CI.
-- Photos are attached to the Request, never committed raw; the workflow commits only copies with location data removed.
+- Photos are attached to the Request, never committed raw; the workflow commits only copies with location data removed. GitHub keeps location data in attachments (tested; see `.scratch/phone-requests/research.md`), and attachments on a public repository are public as soon as they're uploaded, so the owner must turn off location on the phone before attaching; the workflow reminds them and warns when an attachment still has it. Photos are never sent to the model, whose free tier may use what it receives.
+- The workflow pushes and opens pull requests with a GitHub App token, so CI runs on them and counts as the required checks; the Action's own token and `gh workflow run` don't achieve that. The app's ID and private key are repository secrets.

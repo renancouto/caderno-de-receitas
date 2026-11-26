@@ -9,5 +9,6 @@
 - [ ] Reading a Request finds its image attachments and any "foto do passo N" mention; unit tests cover none, one, several, and a Step mention with no matching Step
 - [ ] Every image is stripped with the existing location code before it is committed; raw images are never committed
 - [ ] Photos and Step photos placed in the Recipe's folder with the same names as `@add-recipe`; the Recipe file refers to them; `checkRecipe` and `check:photos` pass
-- [ ] If ticket 01 found that GitHub keeps location data in attachments, the workflow's first comment reminds the owner to turn off location before attaching, and the spec and ADR say so
+- [ ] GitHub keeps location data in attachments (ticket 01; the spec and ADR already say so): the workflow's first comment on a Request with images reminds the owner to turn off location on the phone, and if `hasLocationMetadata` finds location in an attachment, the comment warns in Portuguese to delete that image from the Request
+- [ ] Images are never sent to the model
 - [ ] Tried once for real with a Request that has a Photo and a Step photo

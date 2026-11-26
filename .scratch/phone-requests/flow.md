@@ -15,7 +15,7 @@ sequenceDiagram
   Issue->>Bot: issue opened
   Bot->>Bot: Only you? (author and trigger = your user ID)
   Bot->>Bot: Download photos, strip location
-  Bot->>Model: Issue text + the skill's rules
+  Bot->>Model: Issue text + the shared rules (no photos)
   Model-->>Bot: Recipe file (Portuguese, Standard Units)
   Bot->>Bot: Recipe rules check
   alt Rules fail or model unavailable
@@ -25,7 +25,7 @@ sequenceDiagram
   else Rules pass
     Bot->>PR: Branch + commit (Recipe + clean photos), PR linked to the issue
     Bot->>PR: Comment: guessed conversions
-    Bot->>CI: Start the checks
+    PR->>CI: Pull request opened by the GitHub App starts the checks
     CI-->>PR: Format, types, tests, screenshots
     Bot->>Issue: Comment: link to the PR
   end
