@@ -7,7 +7,7 @@ Everything written into a Recipe is in Brazilian Portuguese.
 ## Terms
 
 - **Recipe**: one dish, kept as one Markdown file with YAML front matter.
-- **Source**: a link the Recipe was adapted from; a credit only. A Recipe with no Source is an **original**, the owner's own.
+- **Source**: a link the Recipe was adapted from; a credit only. A Recipe with no Source is an **Original Recipe**, the owner's own.
 - **Ingredient**: one line of the ingredient list; **Ingredient Group**: a named subset, such as "Cobertura".
 - **Step**: one numbered instruction. **Notes**: the owner's free-text tweaks and observations.
 - **Tag**: a free-form label, such as "jantar".
@@ -33,6 +33,7 @@ Each Ingredient ends as exactly one of:
 Convert everything else, and record each conversion you had to guess, one per line ("1 colher de sopa de manteiga → 15 g"):
 
 - spoon measures: 1 colher de sopa = 15 ml, 1 colher de chá = 5 ml; for solids weigh it (1 colher de sopa de açúcar ≈ 12 g);
+- A Brazilian "xícara" (or "xícara de chá"): 1 `cup`, no conversion; it's the same cup the owner measures with.
 - US cups: 240 ml; write `cup` when the 4% difference doesn't matter, as in most savoury dishes, otherwise ml or g;
 - oz → 28 g, lb → 454 g, fl oz → 30 ml;
 - °F → °C, in the Step text;

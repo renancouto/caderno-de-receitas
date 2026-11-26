@@ -13,8 +13,12 @@ One dish in the Catalogue, written out in full by the owner, with every quantity
 _Avoid_: Entry, item, post
 
 **Source**:
-A link to a place a Recipe was adapted from. A Recipe has none (an original), one, or several. It is a credit only; the Recipe never depends on a Source still existing.
+A link to a place a Recipe was adapted from. A Recipe has none (an Original Recipe), one, or several. It is a credit only; the Recipe never depends on a Source still existing.
 _Avoid_: Original, reference, origin
+
+**Original Recipe**:
+A Recipe with no Source: the owner's own, kept in the owner's wording.
+_Avoid_: Homemade, own recipe
 
 **Notes**:
 Free text on a Recipe where the owner records tweaks and observations.
