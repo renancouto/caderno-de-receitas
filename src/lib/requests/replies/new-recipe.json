@@ -1,12 +1,16 @@
 {
-  "id": "v1_recorded",
-  "model": "gemini-3.8-flash",
-  "status": "completed",
-  "outputs": [
+  "candidates": [
     {
-      "type": "text",
-      "text": "{\"fileName\":\"bolo-de-fuba.md\",\"contents\":\"---\\ntitle: Bolo de fubá\\nservings: 12\\ningredients:\\n  - items:\\n      - name: Fubá\\n        quantity: 2\\n        unit: cup\\n      - name: Ovos\\n        quantity: 3\\n      - name: Manteiga\\n        quantity: 30\\n        unit: g\\n      - name: Sal\\n        toTaste: true\\n---\\n\\n## Preparo\\n\\n1. Bata os ovos com a manteiga.\\n2. Junte o fubá e misture bem.\\n3. Asse por 40 minutos a 180 °C.\\n\",\"conversions\":[\"2 colheres de sopa de manteiga → 30 g\"]}"
+      "content": {
+        "role": "model",
+        "parts": [
+          {
+            "text": "{\"fileName\":\"bolo-de-fuba.md\",\"contents\":\"---\\ntitle: Bolo de fubá\\nservings: 12\\ningredients:\\n  - items:\\n      - name: Fubá\\n        quantity: 2\\n        unit: cup\\n      - name: Ovos\\n        quantity: 3\\n      - name: Manteiga\\n        quantity: 30\\n        unit: g\\n      - name: Sal\\n        toTaste: true\\n---\\n\\n## Preparo\\n\\n1. Bata os ovos com a manteiga.\\n2. Junte o fubá e misture bem.\\n3. Asse por 40 minutos a 180 °C.\\n\",\"conversions\":[\"2 colheres de sopa de manteiga → 30 g\"]}"
+          }
+        ]
+      },
+      "finishReason": "STOP"
     }
   ],
-  "output_text": "{\"fileName\":\"bolo-de-fuba.md\",\"contents\":\"---\\ntitle: Bolo de fubá\\nservings: 12\\ningredients:\\n  - items:\\n      - name: Fubá\\n        quantity: 2\\n        unit: cup\\n      - name: Ovos\\n        quantity: 3\\n      - name: Manteiga\\n        quantity: 30\\n        unit: g\\n      - name: Sal\\n        toTaste: true\\n---\\n\\n## Preparo\\n\\n1. Bata os ovos com a manteiga.\\n2. Junte o fubá e misture bem.\\n3. Asse por 40 minutos a 180 °C.\\n\",\"conversions\":[\"2 colheres de sopa de manteiga → 30 g\"]}"
+  "modelVersion": "gemini-3.8-flash"
 }

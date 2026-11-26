@@ -7,15 +7,28 @@ const rules = readFileSync("docs/recipe-rules.md", "utf8");
 const recorded = (name: string) =>
   readFileSync(new URL(`replies/${name}.json`, import.meta.url), "utf8");
 
-// The model is never called: each test answers with a recorded Interactions API reply.
+// The model is never called: each test answers with a recorded generateContent reply.
 function replyWith(name: string, status = 200) {
+  return replySequence([[name, status]]);
+}
+
+// Answers each call with the next recorded reply; the last one repeats. Retries don't wait.
+function replySequence(replies: [name: string, status: number][]) {
   const sent: { url: string; body: Record<string, unknown> }[] = [];
+  const waits: number[] = [];
   const ask: RequestContext["ask"] = (call) =>
-    askModel({ apiKey: "test-key", ...call }, async (url, init) => {
-      sent.push({ url, body: JSON.parse(String(init.body)) });
-      return new Response(recorded(name), { status });
-    });
-  return { ask, sent };
+    askModel(
+      { apiKey: "test-key", ...call },
+      async (url, init) => {
+        sent.push({ url, body: JSON.parse(String(init.body)) });
+        const [name, status] = replies[Math.min(sent.length, replies.length) - 1]!;
+        return new Response(recorded(name), { status });
+      },
+      async (ms) => {
+        waits.push(ms);
+      },
+    );
+  return { ask, sent, waits };
 }
 
 const context = (ask: RequestContext["ask"], body = "Bolo de fubá\n2 xícaras de fubá\n3 ovos") => ({
@@ -49,12 +62,14 @@ describe("handleRequest", () => {
       ),
     );
     expect(sent).toHaveLength(1);
-    const body = sent[0]?.body ?? {};
-    expect(body.model).toBe("gemini-3.8-flash");
-    expect(body.system_instruction).toContain(rules.trim());
-    expect(body.input).toContain("- https://example.com/bolo");
-    expect(JSON.stringify(body)).not.toContain("user-attachments");
-    expect(body.response_format).toMatchObject({ mime_type: "application/json" });
+    expect(sent[0]?.url).toBe(
+      "https://generativelanguage.googleapis.com/v1beta/models/gemini-3.8-flash:generateContent",
+    );
+    const body = JSON.stringify(sent[0]?.body ?? {});
+    expect(body).toContain(JSON.stringify(rules.trim()).slice(1, 200));
+    expect(body).toContain("- https://example.com/bolo");
+    expect(body).not.toContain("user-attachments");
+    expect(sent[0]?.body.generationConfig).toMatchObject({ responseMimeType: "application/json" });
   });
 
   it("reports a reply that breaks the recipe rules, in Portuguese, with no pull request", async () => {
@@ -72,10 +87,32 @@ describe("handleRequest", () => {
     expect(outcome.comment).toContain("limite gratuito do modelo acabou");
   });
 
-  it("reports the model being unavailable", async () => {
-    const outcome = await handleRequest(context(replyWith("unavailable", 503).ask));
+  it("retries while the model is busy (503) and uses the reply once it answers", async () => {
+    const { ask, sent, waits } = replySequence([
+      ["unavailable", 503],
+      ["unavailable", 503],
+      ["new-recipe", 200],
+    ]);
+    const outcome = await handleRequest(context(ask));
+    expect(outcome.kind).toBe("pull-request");
+    expect(sent).toHaveLength(3);
+    expect(waits).toEqual([5_000, 15_000]);
+  });
+
+  it("reports the model being unavailable after its retries run out", async () => {
+    const { ask, sent } = replyWith("unavailable", 503);
+    const outcome = await handleRequest(context(ask));
     if (outcome.kind !== "failed") throw new Error("expected a failure");
     expect(outcome.comment).toContain("o modelo não respondeu");
+    expect(sent).toHaveLength(4);
+  });
+
+  it("reports a refused key (403) without retrying", async () => {
+    const { ask, sent } = replyWith("permission-denied", 403);
+    const outcome = await handleRequest(context(ask));
+    if (outcome.kind !== "failed") throw new Error("expected a failure");
+    expect(outcome.comment).toContain("a chave do modelo foi recusada");
+    expect(sent).toHaveLength(1);
   });
 
   it("reports an error sent as a one-item array, with its message", async () => {
